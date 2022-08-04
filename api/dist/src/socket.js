@@ -11,9 +11,5 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const Product = require('./models/Products');
 module.exports = (io) => {
     io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
-        socket.on('connected', () => __awaiter(void 0, void 0, void 0, function* () {
-            const ans = yield Product.find();
-            io.emit('data', ans);
-        }));
     }));
 };

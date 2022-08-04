@@ -1,10 +1,10 @@
-import { Box, Button, Container } from '@mui/material'
-import { GetServerSideProps } from 'next';
+import { Box, Button, Container } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import axios from 'axios'; 
 import socket from '../src/socket';
 import { useEffect, useState } from 'react';
+import Card from '../src/components/Card';
 
 interface Data{
   _id : string,
@@ -14,22 +14,22 @@ interface Data{
   price : number,
   stock : boolean
 }
-interface Props {
-  data : Data[]
-}
+
 /* https://www.mongodb.com/docs/drivers/node/current/usage-examples/changeStream/
 trigger an alert when is a change in a database mongodbqwef */
-const Home: NextPage<Props> = ({ data }) => {
-  const[newData, setNewData] = useState([]);
-  socket.on('data', (e) => console.log(e));
+const Home: NextPage = () => {
+  const[data, setData] = useState<Data[]>([]);
+  
+  socket.on('server:changes', async () => setData(await axios.get('http://localhost:3001/').then(r => r.data)));
 
   useEffect(() => {
-    socket.emit('connected');
-  }, []); 
 
-  const handleClick = async() => {
-    setNewData(await axios.get('http://localhost:3001/').then(r => r.data))
-  }
+    const fetchData = async() => {
+      setData(await axios.get('http://localhost:3001/').then(r => r.data));
+    }
+    fetchData();
+
+  }, [])
 
   return (
     
@@ -45,51 +45,20 @@ const Home: NextPage<Props> = ({ data }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>Lista de precios</h1>
-      <Button onClick={handleClick} >Buscar</Button>
+      
       <Box
         display='flex'
+        justifyContent='space-around'
+        alignItems='center'
         flexWrap='wrap'
         border={1}
-        sx={{width : '80vw', height : 'max-content'}}
+        sx={{width : '80vw', minHeight : 'max-content'}}
       >
         {
-          !newData.length ?
             data?.map((e : Data) => {
-              return (
-                <Box 
-                  display='flex'
-                  flexDirection='column'
-                  alignItems='center'
-                  m={2}
-                  border={1}
-                  sx={{width : '30%'}}
-                  key={e._id}
-                >
-                  <h1>{e.title}</h1>
-                  <p>{e.price}</p>
-                  <pre>{e.description}</pre>
-                  <p>{e.stock ? 'Hay stock' : 'No hay en stock'}</p>
-                </Box>
-              )
-          }) : 
-          newData?.map((e : Data) => {
-            return (
-              <Box 
-                display='flex'
-                flexDirection='column'
-                alignItems='center'
-                m={2}
-                border={1}
-                sx={{width : '30%'}}
-                key={e._id}
-              >
-                <h1>{e.title}</h1>
-                <p>{e.price}</p>
-                <pre>{e.description}</pre>
-                <p>{e.stock ? 'Hay stock' : 'No hay en stock'}</p>
-              </Box>
-            )
-        })
+              
+              return <Card key={e._id} data={e} /> 
+          })
         }
 
       </Box>
@@ -101,11 +70,11 @@ const Home: NextPage<Props> = ({ data }) => {
   )
 }
 
-export const getServerSideProps : GetServerSideProps = async () => {
+/* export const getServerSideProps : GetServerSideProps = async () => {
   const data : Props = await axios.get('http://localhost:3001/').then(r  => r.data);
   return {
     props : {data}
   }
-}
+} */
 
 export default Home
