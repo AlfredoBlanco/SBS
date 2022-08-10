@@ -23,7 +23,12 @@ connection.once('open', () => {
     console.log('Mongo opened');
     const MChangeStream = connection.collection('products').watch();
     MChangeStream.on('change', () => {
-        io.emit('server:changes');
+        try {
+            io.emit('server:changes');
+        }
+        catch (e) {
+            console.log(e);
+        }
     });
 });
 server.listen(PORT, () => console.log(`Server listening on PORT ${PORT}...`));

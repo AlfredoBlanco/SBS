@@ -1,10 +1,10 @@
-import { Box, Grid, Typography, IconButton, Button, useMediaQuery } from '@mui/material';
+import { Box, Grid, Typography, Modal, Button, useMediaQuery } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SettingsIcon from '@mui/icons-material/Settings';
 import Item from '../src/Components/Item';
+import Form from '../src/Components/Form';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 interface Data{
@@ -18,17 +18,24 @@ interface Data{
 
 const Home: NextPage = () => {
   const [data, setData] = useState<Data[]>([]);
+  const [open, setOpen] = useState<boolean>(false);
   const W400 = useMediaQuery('(min-width:400px)');
+  
 
   useEffect(() => {
     const fetchData = async() => {
       
-      setData(await fetch('http://localhost:3001/').then(r => r.json()));
+      setData(await fetch(String(process.env.NEXT_PUBLIC_API_PATH)).then(r => r.json()));
     }
     fetchData();
 
   }, [])
-
+  const handleOpen = () => {
+    setOpen(true)
+  }
+  const handleClose = () => {
+    setOpen(false)
+  }
   return (
     <Box 
       display='flex'
@@ -70,9 +77,37 @@ const Home: NextPage = () => {
         sx={{
           margin : '6px'
         }}
+        onClick={handleOpen}
       >
         AGREGAR
       </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        sx={{
+          display : 'flex',
+          alignItems : 'center',
+          justifyContent : 'center'
+        }}
+      >
+        <>
+        <Form add={true} />
+        <Button
+            variant='text'
+            sx={{
+                position : 'absolute',
+                top : `${W400 ? '1rem' : '0.2rem'}`,
+                right : '0.5rem',
+                color : '#fff',
+                border : '1px solid #000',
+               
+            }}
+            onClick={handleClose}
+          >
+            <CloseIcon  />
+        </Button>
+        </>
+      </Modal>
     </Box>
   )
 }

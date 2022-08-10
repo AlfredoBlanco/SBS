@@ -13,6 +13,7 @@ interface Data{
 }
 
 interface Changes{
+    _id ?: string,
     title ?: string,
     image ?: string,
     description ?: string,
@@ -20,9 +21,13 @@ interface Changes{
     stock ?: boolean
 }
 
-export default function Form({data} : {data : Data}){
+export default function Form({data, add} : {data ?: Data, add ?: Boolean}){
     const W400 = useMediaQuery('(min-width:400px)');
-    const [changes, setChanges] = useState<Changes>(data);
+    const [changes, setChanges] = useState<Changes>(data ? data : {title : '',
+        image : '',
+        description : '',
+        price : 0,
+        stock : false});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.name === 'stock') {
@@ -112,9 +117,11 @@ export default function Form({data} : {data : Data}){
             >
               <InputLabel htmlFor="stock-input">Stock</InputLabel>
               <Checkbox id="stock-input" name='stock' 
-                onChange={handleChange} defaultChecked={data.stock ? true : false} />
+                onChange={handleChange} defaultChecked={changes?.stock ? true : false} />
             </FormControl>
-            <NestModal changes={changes} />
+            <NestModal changes={changes} add={add} />
+            
+            
             
 
         </Box>

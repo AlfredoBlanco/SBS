@@ -25,7 +25,12 @@ connection.once('open', () => {
     const MChangeStream = connection.collection('products').watch();
 
     MChangeStream.on('change', () => {
-        io.emit('server:changes');
+        try{
+
+            io.emit('server:changes');
+        } catch(e) {
+            console.log(e);
+        }
     })
 })
 

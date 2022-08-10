@@ -1,19 +1,28 @@
 import { useState } from "react";
-import { Box, Button, Modal, Typography, ButtonGroup } from '@mui/material';
-import grey from '@mui/material/colors/grey';
+import { Box, Button, Modal, Typography, ButtonGroup, CircularProgress } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import axios from 'axios';
 
 
 
 interface Changes{
+    _id ?: string,
     title ?: string,
     image ?: string,
     description ?: string,
     price ?: number,
     stock ?: boolean
 }
+interface Error{
+    title ?: boolean,
+    image ?: boolean,
+    description ?: boolean,
+    price ?: boolean
+}
 
-export default function NestModal({changes} : {changes : Changes}){
+export default function NestModal({changes, add} : {changes : Changes, add ?: Boolean}){
     const [open, setOpen] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleOpen = ()=> {
         setOpen(true);
@@ -21,14 +30,39 @@ export default function NestModal({changes} : {changes : Changes}){
     const handleClose = () => {
         setOpen(false);
     }
+    const handleCheck = () => {
+        let empty : Error = {};
+        if (!changes.title) empty.title = true;
+        if (!changes.description) empty.description = true;
+        if (!changes.image) empty.image = true;
+        if (!changes.price || changes.price <= 0) empty.price = true;
+
+        return Object.keys(empty).length === 0 ? false : true
+    }
+    const handleSend = async () => {
+        setLoading(true);
+        const ans =  add 
+            ? await axios.post(`${process.env.NEXT_PUBLIC_API_PATH}add`,{
+                ...changes
+            })
+            : await axios.put(`${process.env.NEXT_PUBLIC_API_PATH}${changes._id}`,{
+            ...changes
+            });
+
+        if(ans) setTimeout(() => {
+            setLoading(false);
+            window.location.reload();
+        }, 2000)
+    }
     return(
         <>
             <Button 
                 variant='contained'
                 type='submit'
-                onClick={handleOpen}
+                onClick={handleOpen}/* 
+                disabled={handleCheck} */
             >
-                Submit
+                Revisar
             </Button>
             <Modal 
                 open={open}
@@ -58,7 +92,7 @@ export default function NestModal({changes} : {changes : Changes}){
                         my='1rem'
                         align='center'
                     >
-                        Confirme para enviar
+                        Confirme para {add ? 'Agregar' : 'Actualizar'}
                     </Typography>
                     <>
                         <Typography
@@ -140,8 +174,12 @@ export default function NestModal({changes} : {changes : Changes}){
                         </Button>
                         <Button
                             variant='contained'
+                            onClick={handleSend}
                         >
-                            ENVIAR
+                            {
+                                loading ? <CircularProgress color="info" /> : 'ENVIAR' 
+                            }
+                            
                         </Button>
                     </ButtonGroup>
                 </Box>

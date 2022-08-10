@@ -33,13 +33,17 @@ const Home: NextPage = () => {
   const handleClose = () => {
     setOpen(false);
   }
-  
-  socket.on('server:changes', async () => setData(await axios.get('http://localhost:3001/').then(r => r.data)));
+  try{
+    socket.on('server:changes', async () => setData(await axios.get(String(process.env.NEXT_PUBLIC_API_PATH)).then(r => r.data)));
+
+  } catch(e) {
+    console.log(e);
+  }
 
   useEffect(() => {
 
     const fetchData = async() => {
-      setData(await axios.get('http://localhost:3001/').then(r => r.data));
+      setData(await axios.get(String(process.env.NEXT_PUBLIC_API_PATH)).then(r => r.data));
       
     }
     fetchData();
@@ -159,11 +163,6 @@ const Home: NextPage = () => {
   )
 }
 
-/* export const getServerSideProps : GetServerSideProps = async () => {
-  const data : Props = await axios.get('http://localhost:3001/').then(r  => r.data);
-  return {
-    props : {data}
-  }
-} */
+
 
 export default Home

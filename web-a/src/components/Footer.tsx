@@ -1,5 +1,5 @@
 import { Box, Typography, useMediaQuery } from '@mui/material';
-import blueGrey from '@mui/material/colors/blueGrey';
+import { blueGrey } from '@mui/material/colors';
 
 
 export default function Footer() {
