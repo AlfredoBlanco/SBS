@@ -35,7 +35,7 @@ export default function Item({data} : {data : Data}){
     }
     const handleSend = async () => {
         setLoading(true);
-        const ans = await axios.delete(`${process.env.NEXT_PUBLIC_API_PATH}${data._id}`)
+        const ans = await axios.delete(`/${data._id}`)
         if (ans) setTimeout(() => {
           setLoading(false);
           window.location.reload()

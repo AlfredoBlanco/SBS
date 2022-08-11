@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
-/* https://www.youtube.com/watch?v=-bI0diefasA Minuto 41:23 */
-try{
+require('dotenv').config();
 
-    mongoose.connect('mongodb://localhost/products')
+const DB_URL : string = String(process.env.DB_URL);
+try{
+    
+    mongoose.connect(DB_URL)
     .then(db => console.log('DB is connected'));
 
 }catch (e) {

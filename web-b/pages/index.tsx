@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Item from '../src/Components/Item';
 import Form from '../src/Components/Form';
 import CloseIcon from '@mui/icons-material/Close';
+import axios from 'axios';
 
 
 interface Data{
@@ -15,7 +16,7 @@ interface Data{
   price : number,
   stock : boolean
 }
-
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_PATH;
 const Home: NextPage = () => {
   const [data, setData] = useState<Data[]>([]);
   const [open, setOpen] = useState<boolean>(false);
@@ -25,7 +26,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     const fetchData = async() => {
       
-      setData(await fetch(String(process.env.NEXT_PUBLIC_API_PATH)).then(r => r.json()));
+      setData(await axios(`/`).then(r => r.data));
     }
     fetchData();
 
@@ -60,7 +61,12 @@ const Home: NextPage = () => {
       <Grid
         container
         width={W400 ? '80vw' : '100vw'}
-        border={2}
+        p={W400 ? '0.2rem' : '1rem'}
+        sx={{
+          boxShadow : '2px 2px 2px 1px rgba(0, 0, 0, 0.2)',
+          borderRadius : '1rem'
+
+        }}
       >
         {
           data.map((e : Data) => {

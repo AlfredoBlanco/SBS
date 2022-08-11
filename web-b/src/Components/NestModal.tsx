@@ -13,14 +13,9 @@ interface Changes{
     price ?: number,
     stock ?: boolean
 }
-interface Error{
-    title ?: boolean,
-    image ?: boolean,
-    description ?: boolean,
-    price ?: boolean
-}
 
-export default function NestModal({changes, add} : {changes : Changes, add ?: Boolean}){
+
+export default function NestModal({changes, add, validate} : {changes : Changes, add ?: boolean, validate : boolean }){
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -30,22 +25,14 @@ export default function NestModal({changes, add} : {changes : Changes, add ?: Bo
     const handleClose = () => {
         setOpen(false);
     }
-    const handleCheck = () => {
-        let empty : Error = {};
-        if (!changes.title) empty.title = true;
-        if (!changes.description) empty.description = true;
-        if (!changes.image) empty.image = true;
-        if (!changes.price || changes.price <= 0) empty.price = true;
-
-        return Object.keys(empty).length === 0 ? false : true
-    }
+    
     const handleSend = async () => {
         setLoading(true);
         const ans =  add 
-            ? await axios.post(`${process.env.NEXT_PUBLIC_API_PATH}add`,{
+            ? await axios.post(`/add`,{
                 ...changes
             })
-            : await axios.put(`${process.env.NEXT_PUBLIC_API_PATH}${changes._id}`,{
+            : await axios.put(`/${changes._id}`,{
             ...changes
             });
 
@@ -59,8 +46,8 @@ export default function NestModal({changes, add} : {changes : Changes, add ?: Bo
             <Button 
                 variant='contained'
                 type='submit'
-                onClick={handleOpen}/* 
-                disabled={handleCheck} */
+                onClick={handleOpen}
+                disabled={validate}
             >
                 Revisar
             </Button>

@@ -20,7 +20,7 @@ interface Data{
   stock : boolean
 }
 
-
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_PATH;
 const Home: NextPage = () => {
   const[data, setData] = useState<Data[]>([]);
   const [open, setOpen] = useState<boolean>(false);
@@ -34,7 +34,7 @@ const Home: NextPage = () => {
     setOpen(false);
   }
   try{
-    socket.on('server:changes', async () => setData(await axios.get(String(process.env.NEXT_PUBLIC_API_PATH)).then(r => r.data)));
+    socket.on('server:changes', async () => setData(await axios.get(`/`).then(r => r.data)));
 
   } catch(e) {
     console.log(e);
@@ -43,7 +43,7 @@ const Home: NextPage = () => {
   useEffect(() => {
 
     const fetchData = async() => {
-      setData(await axios.get(String(process.env.NEXT_PUBLIC_API_PATH)).then(r => r.data));
+      setData(await axios.get(`/`).then(r => r.data));
       
     }
     fetchData();

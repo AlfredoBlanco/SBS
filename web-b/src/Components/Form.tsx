@@ -1,5 +1,7 @@
-import { Box, Checkbox, FormControl, InputLabel, Input, FormHelperText, Button, useMediaQuery, Typography } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { Box, Checkbox, FormControl,
+    InputLabel, Input, FormHelperText,
+    useMediaQuery, Typography } from '@mui/material';
+import { useState } from 'react';
 import NestModal from './NestModal';
 
 
@@ -21,8 +23,16 @@ interface Changes{
     stock ?: boolean
 }
 
-export default function Form({data, add} : {data ?: Data, add ?: Boolean}){
+interface Error{
+    title ?: boolean,
+    image ?: boolean,
+    description ?: boolean,
+    price ?: boolean
+}
+
+export default function Form({data, add} : {data ?: Data, add ?: boolean}){
     const W400 = useMediaQuery('(min-width:400px)');
+    const [check, setCheck] = useState<boolean>(true);
     const [changes, setChanges] = useState<Changes>(data ? data : {title : '',
         image : '',
         description : '',
@@ -42,9 +52,18 @@ export default function Form({data, add} : {data ?: Data, add ?: Boolean}){
                 [e.target.name] : e.target.value
             })
         }
+        handleCheck()
     }
     
-    
+    const handleCheck = () => {
+        let empty : Error = {};
+        if (!changes.title) empty.title = true;
+        if (!changes.description) empty.description = true;
+        if (!changes.image) empty.image = true;
+        if (!changes.price || changes.price <= 0) empty.price = true;
+
+        Object.keys(empty).length === 0 ? setCheck(false) : setCheck(true)
+    }
     return(
         <Box 
             display = 'flex'
@@ -117,9 +136,9 @@ export default function Form({data, add} : {data ?: Data, add ?: Boolean}){
             >
               <InputLabel htmlFor="stock-input">Stock</InputLabel>
               <Checkbox id="stock-input" name='stock' 
-                onChange={handleChange} defaultChecked={changes?.stock ? true : false} />
+                onChange={handleChange} checked={changes?.stock ? true : false} />
             </FormControl>
-            <NestModal changes={changes} add={add} />
+            <NestModal changes={changes} add={add} validate={check} />
             
             
             
