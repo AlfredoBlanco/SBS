@@ -29,7 +29,7 @@ export default function Footer() {
                 color='primary'
                 align='center'
             >
-                Fecha de Deploy : <strong>../../..</strong>
+                Fecha de Deploy : <strong>12/08/22</strong>
             </Typography>
 
         </Box>
