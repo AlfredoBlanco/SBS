@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useMediaQuery, Collapse } from '@mui/material';
+import { Box, Button, Typography, useMediaQuery, Collapse, Skeleton } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -147,6 +147,11 @@ const Home: NextPage = () => {
         mb='3rem'
         sx={{width : '80vw', minHeight : 'max-content'}}
       >
+        {
+          data?.length ? '' : (
+            <Card data={{_id : 'string'}}/>
+          )
+        }
         {
             data?.map((e : Data) => {
               

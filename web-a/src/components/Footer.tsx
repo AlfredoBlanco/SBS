@@ -11,7 +11,7 @@ export default function Footer() {
             flexDirection={W650 ? 'row' : 'column'}
             justifyContent='space-evenly'
             alignItems='center'
-            minHeight='40vh'
+            minHeight='20vh'
             width='100%'
             sx={{
                 background : `${blueGrey[900]}`

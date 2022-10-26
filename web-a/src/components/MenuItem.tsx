@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 
 export default function MenuItem({go, data } : {go : string ,data : string}) {
     return (
-    <Link href={`#${go}`} >
+    <Link href={`/about/#${go}`} >
         <Typography 
           variant='h3'
           my='0.6rem'

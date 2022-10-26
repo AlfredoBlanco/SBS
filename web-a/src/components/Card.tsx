@@ -1,7 +1,5 @@
-import { Box, Typography, IconButton, Modal } from '@mui/material';
+import { Box, Typography, IconButton, Modal, Skeleton } from '@mui/material';
 import { red, green, grey } from '@mui/material/colors';
-import Image from 'next/image';
-import { sizing } from '@mui/system';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
@@ -10,11 +8,11 @@ import { useState } from 'react';
 
 interface Data{
     _id : string,
-    title : string,
-    image : string,
-    description : string,
-    price : number,
-    stock : boolean
+    title ?: string,
+    image ?: string,
+    description ?: string,
+    price ?: number,
+    stock ?: boolean
 }
 
 export default function Card({data} : {data : Data}) {
@@ -76,18 +74,31 @@ export default function Card({data} : {data : Data}) {
                     variant='h2'
                     align='center'
                 >
-                    {data.title}
+                    {
+                        data.title
+                        ? `${data.title}`
+                        : ( <Skeleton variant='text' sx={{width : '10rem'}} />)
+                    }
                 </Typography>
                 <Typography
-            variant='caption'>
-            ${data.price}
-                </Typography>
-                <Typography
-                variant='body1'
-                align='center'
-                mx={2}
+                    variant='caption'
                 >
-                 {data.description}
+                    {
+                        data.price
+                        ? `$ ${data.price}`
+                        : ( <Skeleton variant='text' sx={{width : '10rem'}} />)
+                    }
+                </Typography>
+                <Typography
+                    variant='body1'
+                    align='center'
+                    mx={2}
+                >
+                 {
+                    data.description
+                    ? `${data.description}`
+                    : ( <Skeleton variant='text' sx={{width : '10rem'}} />)
+                }
                  </Typography>
                  <Typography
                     variant='body2'
@@ -172,13 +183,3 @@ export default function Card({data} : {data : Data}) {
         </Box>
     )
 }
-/* 
-"
-    "_id": "62ec20df0cf1363fc68e84e4",
-        "title": "Remera adidas",
-    "_id": "62ec213c0cf1363fc68e85bd",
-        "title": "Gorro de lana",
-    "_id": "62ec21790cf1363fc68e86fb",
-        "title": "Anteojos Ripcurl",
-
-*/
