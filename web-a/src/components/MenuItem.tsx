@@ -1,10 +1,9 @@
-import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 
 
-export default function MenuItem({go, data } : {go : string ,data : string}) {
+export default function MenuItem({data } : {data : string}) {
     return (
-    <Link href={`/about/#${go}`} >
+    
         <Typography 
           variant='h3'
           my='0.6rem'
@@ -24,6 +23,5 @@ export default function MenuItem({go, data } : {go : string ,data : string}) {
         >
           {data}
         </Typography>
-    </Link>
     )
 }

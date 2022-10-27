@@ -14,5 +14,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
-app.use('/', require('./routes'));
+app.use('/auth', require('./routes/auth'));
+app.use('/products', require('./routes'));
+app.use('/users', require('./routes/users'));
 module.exports = app;

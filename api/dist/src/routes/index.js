@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const Product = require('../models/Products');
+const { Product } = require('../models');
 const router = (0, express_1.Router)();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,8 +24,8 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 router.post('/add', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, price, image, description, stock } = req.body;
-        const newProdu = new Product({ title, price, image, description, stock });
-        yield newProdu.save();
+        const newProduct = new Product({ title, price, image, description, stock });
+        yield newProduct.save();
         return res.json({ info: 'Product saved successfully' });
     }
     catch (e) {

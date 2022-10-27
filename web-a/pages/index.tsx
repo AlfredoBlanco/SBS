@@ -22,7 +22,7 @@ interface Data{
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_PATH;
 const Home: NextPage = () => {
-  const[data, setData] = useState<Data[]>([]);
+  const [data, setData] = useState<Data[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const W850 = useMediaQuery('(min-width:750px)');
   const W500 = useMediaQuery('(min-width:500px)');
@@ -118,13 +118,13 @@ const Home: NextPage = () => {
               onClick={handleClose}
             >
 
-              <MenuItem go={'about'} data={'Sobre Nosostros'} />
+              <MenuItem data={'Sobre Nosostros'} />
             </Box>
             <Box
               width='100%'
               onClick={handleClose}
             >
-              <MenuItem go={'contact'} data={'Contacto'} />
+              <MenuItem data={'Contacto'} />
             </Box>
           </Box>
         </Box>

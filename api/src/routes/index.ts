@@ -1,10 +1,19 @@
 import { Router, Response, Request } from "express";
-const Product = require('../models/Products');
+const { Product } = require('../models');
 
 const router = Router();
 
-interface Produ {
+interface Product {
     _id : string,
+    title : string,
+    price : number,
+    image : string,
+    description : string,
+    stock : boolean
+    
+}
+
+interface ProductBody {
     title : string,
     price : number,
     image : string,
@@ -17,7 +26,7 @@ interface Produ {
 router.get('/', async (req : Request, res : Response) => {
     try {
 
-        const products : Produ[] = await Product.find();
+        const products : Product[] = await Product.find();
         
         return res.json(products)
     } catch(e) {
@@ -28,11 +37,10 @@ router.get('/', async (req : Request, res : Response) => {
 router.post('/add', async (req : Request, res : Response) => {
     try{
 
-        const { title, price, image, description, stock } : { title : string, price : number,
-            image : string, description : string, stock : boolean } = req.body;
-        const newProdu = new Product({ title, price, image, description, stock});
+        const { title, price, image, description, stock } : ProductBody = req.body;
+        const newProduct = new Product({ title, price, image, description, stock});
         
-        await newProdu.save() 
+        await newProduct.save() 
         
         return res.json({info : 'Product saved successfully'});
     }catch (e) {
@@ -46,7 +54,7 @@ router.get('/:id', async (req : Request, res : Response) => {
 
         const id : string = req.params.id;
         
-        const product : Produ = await Product.findById(id);
+        const product : Product = await Product.findById(id);
         return res.json(product);
 
     } catch (e) {
