@@ -9,13 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const { validateUser } = require('../middlewares');
-const { register } = require('../controllers/auth');
-const router = (0, express_1.Router)();
-router.post('/register', validateUser, register);
-router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res.json('No disponible');
-    /* para comparar bcrypt.compare(loque viene, lo guardado) T/F */
-}));
-module.exports = router;
+const { createUser } = require('../services/users');
+const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield createUser(Object.assign({}, req.body));
+        //Generar JWT
+        return res.json({ info: 'User saved successfully' });
+    }
+    catch (e) {
+        return res.json({ error: e });
+    }
+});
+module.exports = {
+    register,
+};

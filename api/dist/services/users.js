@@ -8,14 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const { validateUser } = require('../middlewares');
-const { register } = require('../controllers/auth');
-const router = (0, express_1.Router)();
-router.post('/register', validateUser, register);
-router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res.json('No disponible');
-    /* para comparar bcrypt.compare(loque viene, lo guardado) T/F */
-}));
-module.exports = router;
+const { User } = require('../models');
+const createUser = ({ name, email, password, role = 2 }) => __awaiter(void 0, void 0, void 0, function* () {
+    const newUser = new User({ name, email, password, role });
+    yield newUser.save();
+});
+module.exports = {
+    createUser,
+};
