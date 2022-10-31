@@ -9,30 +9,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { createUser, findByEmail, loginUser } = require('../services/users');
-const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const { validateJWT } = require('../helpers/jwt');
+const { findByEmail } = require('../services/users');
+const isAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    let user;
     try {
-        yield createUser(Object.assign({}, req.body));
-        return res.json({ info: 'User saved successfully' });
-    }
-    catch (e) {
-        return res.json({ error: e });
-    }
-});
-const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
-    try {
-        const [logged] = yield findByEmail(email);
+        const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ');
+        if (!token)
+            return res.json({ error: 'Token not provided' });
+        try {
+            user = yield validateJWT(token[1]);
+        }
+        catch (err) {
+            return res.json({ error: 'Invalid token' });
+        }
+        const [logged] = yield findByEmail(user.email);
         if (!logged)
             return res.json({ error: 'User not found' });
-        const { error, token } = yield loginUser(password, logged);
-        return error ? res.json({ error }) : res.json({ token });
+        req.userRole = logged.role;
+        return next();
     }
     catch (e) {
-        return res.json({ error: e });
+        return res.json(e);
     }
 });
-module.exports = {
-    register,
-    login,
-};
+module.exports = isAuth;

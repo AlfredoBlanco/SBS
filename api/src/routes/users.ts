@@ -1,5 +1,6 @@
 import { Router, Response, Request } from "express";
 const { User } = require('../models');
+const { isAuth } = require('../middlewares');
 
 const router = Router();
 
@@ -11,12 +12,11 @@ interface Users {
     role : number;
 }
 
-router.get('/', async (req : Request, res : Response) => {
-
+router.get('/', isAuth, async (req : Request, res : Response) => {
     const users : Users[] = await User.find();
 
     return res.json({ users });
-})
+});
 
 router.delete('/:id', async (req : Request, res : Response) => {
     try{

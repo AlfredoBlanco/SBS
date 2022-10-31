@@ -11,8 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const { User } = require('../models');
+const { isAuth } = require('../middlewares');
 const router = (0, express_1.Router)();
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/', isAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield User.find();
     return res.json({ users });
 }));

@@ -11,13 +11,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const { User } = require('../models');
 const bcryptjs = require('bcryptjs');
+const { generateJWT } = require('../helpers/jwt');
 const createUser = ({ name, email, password, role = 2 }) => __awaiter(void 0, void 0, void 0, function* () {
     const passwordHash = yield bcryptjs.hash(password, 10);
     const newUser = new User({ name, email, password: passwordHash, role });
     yield newUser.save();
 });
+const loginUser = (passwordSent, { password, _id, email, role }) => __awaiter(void 0, void 0, void 0, function* () {
+    let token = '';
+    try {
+        const result = yield bcryptjs.compare(passwordSent, password);
+        if (!result)
+            return { error: 'Incorrect password' };
+        token = yield generateJWT({ _id, email, role });
+        return { token };
+    }
+    catch (e) {
+        return { error: "Couldn't generate the token" };
+    }
+});
 const findByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () { return yield User.find({ email }); });
 module.exports = {
     createUser,
     findByEmail,
+    loginUser,
 };
