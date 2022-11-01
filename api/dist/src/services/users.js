@@ -20,6 +20,8 @@ const createUser = ({ name, email, password, role = 2 }) => __awaiter(void 0, vo
 const loginUser = (passwordSent, { password, _id, email, role }) => __awaiter(void 0, void 0, void 0, function* () {
     let token = '';
     try {
+        if (!passwordSent)
+            return { error: 'Not password sent' };
         const result = yield bcryptjs.compare(passwordSent, password);
         if (!result)
             return { error: 'Incorrect password' };

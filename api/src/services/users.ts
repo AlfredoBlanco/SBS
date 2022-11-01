@@ -23,9 +23,10 @@ const createUser = async({ name, email, password, role = 2 } : UserBody) => {
 const loginUser = async(passwordSent : string, { password, _id, email, role } : UserBody) => {
     let token = '';
     try{
-
-        const result = await bcryptjs.compare(passwordSent, password);
+        if(!passwordSent) return { error : 'Not password sent'};
         
+        const result = await bcryptjs.compare(passwordSent, password);
+
         if(!result) return { error : 'Incorrect password' };
         
         token = await generateJWT({ _id, email, role});

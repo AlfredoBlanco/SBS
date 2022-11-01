@@ -18,7 +18,7 @@ interface UserError {
 const validateUser = async (req : Request, res : Response, next : NextFunction) => {
     const { name, email, password, passwordConfirm} : UserBody = req.body;
     let error : UserError = {};
-    if(!/^[a-zA-z ]+$/i.test(name) || name.length < 4) error.name = 'El nombre solo puede contener letras y ser mayor a 4';
+    if(!name || !/^[a-zA-z ]+$/i.test(name) || name.length < 4) error.name = 'El nombre solo puede contener letras y ser mayor a 4';
 
     if(email){
         if(!/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i.test(email)) error.email = 'El email es inválido';

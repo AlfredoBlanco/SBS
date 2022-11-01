@@ -9,21 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { findByEmail } = require('../services/users');
-const validateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password, passwordConfirm } = req.body;
+const validateProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { title, price, image, description } = req.body;
     let error = {};
-    if (!name || !/^[a-zA-z ]+$/i.test(name) || name.length < 4)
-        error.name = 'El nombre solo puede contener letras y ser mayor a 4';
-    if (email) {
-        if (!/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i.test(email))
-            error.email = 'El email es inválido';
-        const [exists] = yield findByEmail(email);
-        if (exists)
-            error.email = 'Ya existe un usuario con este email';
-    }
-    if (!password || password !== passwordConfirm)
-        error.password = 'Las contraseñas no coinciden';
+    if (!title || !/^[a-zA-z ]+$/i.test(title) || title.length < 4)
+        error.title = 'El nombre solo puede contener letras y ser mayor a 4';
+    if (!Number(price))
+        error.price = 'El precio tiene que ser un valor numérico';
+    if (!image || !/^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(image))
+        error.image = 'La imagen tiene que ser una dirección url';
     return Object.keys(error).length ? res.json(error) : next();
 });
-module.exports = validateUser;
+module.exports = validateProduct;
