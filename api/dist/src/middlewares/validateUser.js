@@ -14,16 +14,19 @@ const validateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     const { name, email, password, passwordConfirm } = req.body;
     let error = {};
     if (!name || !/^[a-zA-z ]+$/i.test(name) || name.length < 4)
-        error.name = 'El nombre solo puede contener letras y ser mayor a 4';
+        error.name = 'The name should have only letters and longer than 4 characters';
     if (email) {
         if (!/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i.test(email))
-            error.email = 'El email es inválido';
+            error.email = 'The email is invalid';
         const [exists] = yield findByEmail(email);
         if (exists)
-            error.email = 'Ya existe un usuario con este email';
+            error.email = 'Already exists an user with this email';
+    }
+    else {
+        error.email = 'The email is required';
     }
     if (!password || password !== passwordConfirm)
-        error.password = 'Las contraseñas no coinciden';
+        error.password = "The passwords don't match";
     return Object.keys(error).length ? res.json(error) : next();
 });
 module.exports = validateUser;

@@ -1,13 +1,17 @@
 import { Request, Response } from "express";
 const { createUser, findByEmail, loginUser } = require('../services/users');
-
+const { success } = require('../helpers/responses');
 
 
 const register = async(req : Request, res: Response) => {
     try{
 
         await createUser({ ...req.body });
-        return res.json({info : 'User saved successfully'});
+        return success({
+            res,
+            data : 'User saved successfully',
+            status : 201,
+        })
     }catch (e) {
         return res.json({error : e});
     }
@@ -22,7 +26,12 @@ const login = async(req : Request, res: Response) => {
 
         const { error, token } = await loginUser(password, logged);
         
-        return error ? res.json({ error }) : res.json({ token }); 
+        return error 
+            ? res.json({ error })
+            : success({
+                res,
+                data : token,
+            }); 
     }catch (e) {
         return res.json({error : e});
     }

@@ -10,10 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { createUser, findByEmail, loginUser } = require('../services/users');
+const { success } = require('../helpers/responses');
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield createUser(Object.assign({}, req.body));
-        return res.json({ info: 'User saved successfully' });
+        return success({
+            res,
+            data: 'User saved successfully',
+            status: 201,
+        });
     }
     catch (e) {
         return res.json({ error: e });
@@ -26,7 +31,12 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!logged)
             return res.json({ error: 'User not found' });
         const { error, token } = yield loginUser(password, logged);
-        return error ? res.json({ error }) : res.json({ token });
+        return error
+            ? res.json({ error })
+            : success({
+                res,
+                data: token,
+            });
     }
     catch (e) {
         return res.json({ error: e });

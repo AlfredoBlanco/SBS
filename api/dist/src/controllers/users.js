@@ -10,10 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { User } = require('../models');
+const { success } = require('../helpers/responses');
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield User.find();
-        return res.json({ users });
+        return success({
+            res,
+            data: users
+        });
     }
     catch (e) {
         return res.json({ error: e });
@@ -23,7 +27,10 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const id = req.params.id;
         yield User.deleteOne({ _id: id });
-        return res.json({ info: 'Deleted successfully' });
+        return success({
+            res,
+            data: 'Deleted successfully',
+        });
     }
     catch (e) {
         return res.json({ error: e });

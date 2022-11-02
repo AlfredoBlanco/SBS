@@ -13,11 +13,13 @@ const validateProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     const { title, price, image, description } = req.body;
     let error = {};
     if (!title || !/^[a-zA-z ]+$/i.test(title) || title.length < 4)
-        error.title = 'El nombre solo puede contener letras y ser mayor a 4';
+        error.title = 'The title should have only letters and longer than 4 characters';
     if (!Number(price))
-        error.price = 'El precio tiene que ser un valor numérico';
+        error.price = 'The price should be a numeric value';
     if (!image || !/^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(image))
-        error.image = 'La imagen tiene que ser una dirección url';
+        error.image = 'The image should be an url direction';
+    if (!description || description.length < 10)
+        error.description = 'The description should be longer than 10 characters';
     return Object.keys(error).length ? res.json(error) : next();
 });
 module.exports = validateProduct;

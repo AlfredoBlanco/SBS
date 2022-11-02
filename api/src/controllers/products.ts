@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 const { allProducts, newProduct, oneProduct,
     productDelete, productUpdate } = require('../services/products');
+const { success } = require('../helpers/responses');
 
 interface Product extends ProductBody{
     _id : string;
@@ -19,7 +20,10 @@ const getAllProducts = async (req : Request, res : Response) => {
     try {
         const products : Product[] = await allProducts();
         
-        return res.json(products);
+        return success({
+            res,
+            data : products
+        });
 
     } catch(e) {
         return res.json({error : e});
@@ -33,7 +37,11 @@ const createProduct = async (req : Request, res : Response) => {
 
         await newProduct({ title, price, image, description, stock});
         
-        return res.json({info : 'Product saved successfully'});
+        return success({
+            res,
+            data : 'Product saved successfully',
+            status : 201,
+        });
     }catch (e) {
         return res.json({error : e});
     }
@@ -47,7 +55,10 @@ const getOneProduct = async (req : Request, res : Response) => {
         
         const product : Product = await oneProduct(id);
 
-        return res.json(product);
+        return success({
+            res,
+            data : product
+        });
 
     } catch (e) {
         return res.json({error : e});
@@ -62,7 +73,10 @@ const updateProduct = async (req : Request, res : Response) => {
         
         await productUpdate(id, { title, price, image, description, stock });
 
-        return res.json({info : 'Updated successfully'});
+        return success({
+            res,
+            data : 'Updated successfully',
+        })
 
     } catch (e) {
         return res.json({error : e});
@@ -76,7 +90,10 @@ const deleteProduct = async (req : Request, res : Response) => {
         
         await productDelete(id);
         
-        return res.json({info : 'Deleted successfully'});
+        return success({
+            res,
+            data : 'Deleted successfully',
+        })
 
     } catch (e) {
         return res.json({error : e});

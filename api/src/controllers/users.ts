@@ -1,6 +1,7 @@
 export{}
 import { Response, Request } from "express";
 const { User } = require('../models');
+const { success } = require('../helpers/responses');
 
 interface Users {
     _id : string;
@@ -14,7 +15,10 @@ const getAllUsers = async (req : Request, res : Response) => {
     try{
 
         const users : Users[] = await User.find();
-        return res.json({ users });
+        return success({
+            res,
+            data : users
+        });
     } catch (e) {
         return res.json({error : e});        
     }
@@ -27,7 +31,10 @@ const deleteUser = async (req : Request, res : Response) => {
         
         await User.deleteOne({_id : id});
         
-        return res.json({info : 'Deleted successfully'});
+        return success({
+            res,
+            data : 'Deleted successfully',
+        });
 
     } catch (e) {
         return res.json({error : e});
