@@ -18,6 +18,7 @@ app.use((req : Request, res : Response, next : NextFunction) => {
 });
 
 app.use('/auth', require('./routes/auth'));
+app.use('/payment', require('./routes/payment'));
 app.use('/products', require('./routes'));
 app.use('/users', require('./routes/users'));
 
