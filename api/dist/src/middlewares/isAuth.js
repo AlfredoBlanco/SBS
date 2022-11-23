@@ -11,27 +11,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const { validateJWT } = require('../helpers/jwt');
 const { findByEmail } = require('../services/users');
+const { issue, serverError } = require('../helpers/responses');
 const isAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     let user;
     try {
         const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ');
         if (!token)
-            return res.json({ error: 'Token not provided' });
+            return issue({
+                res,
+                data: 'Token not provided',
+            });
         try {
             user = yield validateJWT(token[1]);
         }
         catch (err) {
-            return res.json({ error: 'Invalid token' });
+            return issue({
+                res,
+                data: 'Invalid token',
+                status: 403,
+            });
         }
         const [logged] = yield findByEmail(user.email);
         if (!logged)
-            return res.json({ error: 'User not found' });
+            return issue({
+                res,
+                data: 'User not found',
+                status: 404,
+            });
         req.userRole = logged.role;
         return next();
     }
     catch (e) {
-        return res.json(e);
+        return serverError({
+            res,
+            data: e,
+        });
     }
 });
 module.exports = isAuth;

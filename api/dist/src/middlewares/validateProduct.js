@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const { issue } = require('../helpers/responses');
 const validateProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, price, image, description } = req.body;
     let error = {};
@@ -20,6 +21,11 @@ const validateProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         error.image = 'The image should be an url direction';
     if (!description || description.length < 10)
         error.description = 'The description should be longer than 10 characters';
-    return Object.keys(error).length ? res.json(error) : next();
+    return Object.keys(error).length
+        ? issue({
+            res,
+            data: error,
+        })
+        : next();
 });
 module.exports = validateProduct;

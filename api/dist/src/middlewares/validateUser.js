@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { findByEmail } = require('../services/users');
+const { issue } = require('../helpers/responses');
 const validateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password, passwordConfirm } = req.body;
     let error = {};
@@ -27,6 +28,11 @@ const validateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     }
     if (!password || password !== passwordConfirm)
         error.password = "The passwords don't match";
-    return Object.keys(error).length ? res.json(error) : next();
+    return Object.keys(error).length
+        ? issue({
+            res,
+            data: error,
+        })
+        : next();
 });
 module.exports = validateUser;

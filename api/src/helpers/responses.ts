@@ -25,6 +25,9 @@ interface Res {
 interface Success extends Res {
     data : Product | Product[] | Users[] | string;
 }
+interface Error extends Res {
+    data : string;
+}
 
 const success = ({ res, data, status = 200 } : Success) => {
     return res.status(status).json({
@@ -32,16 +35,20 @@ const success = ({ res, data, status = 200 } : Success) => {
     })
 }
 
-const error = () => {
-
+const issue = ({ res, data, status = 400 } : Error) => {
+    return res.status(status).json({
+        error : data,
+    })
 }
 
-const serverError = () => {
-
+const serverError = ({ res, data, status = 500 } : Error) => {
+    return res.status(status).json({
+        error : data,
+    })
 }
 
 module.exports = {
-    error,
+    issue,
     serverError,
     success,
 }

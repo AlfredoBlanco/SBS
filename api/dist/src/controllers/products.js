@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { allProducts, newProduct, oneProduct, productDelete, productUpdate } = require('../services/products');
-const { success } = require('../helpers/responses');
+const { success, error, serverError } = require('../helpers/responses');
 const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const products = yield allProducts();
@@ -20,7 +20,10 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (e) {
-        return res.json({ error: e });
+        return serverError({
+            res,
+            data: e,
+        });
     }
 });
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,7 +37,10 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (e) {
-        return res.json({ error: e });
+        return serverError({
+            res,
+            data: e,
+        });
     }
 });
 const getOneProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -47,7 +53,10 @@ const getOneProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (e) {
-        return res.json({ error: e });
+        return serverError({
+            res,
+            data: e,
+        });
     }
 });
 const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -61,7 +70,10 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (e) {
-        return res.json({ error: e });
+        return serverError({
+            res,
+            data: e,
+        });
     }
 });
 const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -74,7 +86,10 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (e) {
-        return res.json({ error: e });
+        return serverError({
+            res,
+            data: e,
+        });
     }
 });
 module.exports = {

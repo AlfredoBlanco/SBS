@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
 const { allProducts, newProduct, oneProduct,
     productDelete, productUpdate } = require('../services/products');
-const { success } = require('../helpers/responses');
+const { success, error, serverError } = require('../helpers/responses');
 
 interface Product extends ProductBody{
     _id : string;
@@ -26,7 +26,10 @@ const getAllProducts = async (req : Request, res : Response) => {
         });
 
     } catch(e) {
-        return res.json({error : e});
+        return serverError({
+            res,
+            data: e,
+        })
     }
 }
 
@@ -43,7 +46,10 @@ const createProduct = async (req : Request, res : Response) => {
             status : 201,
         });
     }catch (e) {
-        return res.json({error : e});
+        return serverError({
+            res,
+            data: e,
+        })
     }
 
 }
@@ -61,7 +67,10 @@ const getOneProduct = async (req : Request, res : Response) => {
         });
 
     } catch (e) {
-        return res.json({error : e});
+        return serverError({
+            res,
+            data: e,
+        })
     }
 }
 
@@ -79,7 +88,10 @@ const updateProduct = async (req : Request, res : Response) => {
         })
 
     } catch (e) {
-        return res.json({error : e});
+        return serverError({
+            res,
+            data: e,
+        })
     }
 }
 
@@ -96,7 +108,10 @@ const deleteProduct = async (req : Request, res : Response) => {
         })
 
     } catch (e) {
-        return res.json({error : e});
+        return serverError({
+            res,
+            data: e,
+        })
     }
 }
 

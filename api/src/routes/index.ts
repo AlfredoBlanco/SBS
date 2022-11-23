@@ -7,7 +7,7 @@ const router = Router();
 
 router.get('/', getAllProducts)
 
-router.post('/',isAuth, isAdmin, validateProduct, createProduct)
+router.post('/', isAuth, isAdmin, validateProduct, createProduct)
 
 router.get('/:id', getOneProduct)
 

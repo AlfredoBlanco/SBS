@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 const { findByEmail } = require('../services/users');
+const { issue } = require('../helpers/responses');
 
 interface UserBody {
     name : string;
@@ -32,7 +33,12 @@ const validateUser = async (req : Request, res : Response, next : NextFunction) 
 
     if(!password || password !== passwordConfirm) error.password = "The passwords don't match";
 
-    return Object.keys(error).length ? res.json(error) : next();
+    return Object.keys(error).length 
+        ? issue({
+            res,
+            data: error,
+        })
+        : next();
 }
 
 module.exports = validateUser;

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+const { issue } = require('../helpers/responses');
 
 interface ProductBody {
     title : string;
@@ -26,7 +27,12 @@ const validateProduct = async (req : Request, res : Response, next : NextFunctio
     
     if(!description || description.length < 10) error.description = 'The description should be longer than 10 characters';
 
-    return Object.keys(error).length ? res.json(error) : next();
+    return Object.keys(error).length 
+        ? issue({
+            res,
+            data: error,
+        })
+        : next();
 }
 
 module.exports = validateProduct;

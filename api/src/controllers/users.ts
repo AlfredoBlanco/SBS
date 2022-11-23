@@ -1,7 +1,7 @@
 export{}
 import { Response, Request } from "express";
 const { User } = require('../models');
-const { success } = require('../helpers/responses');
+const { success, serverError } = require('../helpers/responses');
 
 interface Users {
     _id : string;
@@ -20,7 +20,10 @@ const getAllUsers = async (req : Request, res : Response) => {
             data : users
         });
     } catch (e) {
-        return res.json({error : e});        
+        return serverError({
+            res,
+            data: e,
+        })       
     }
 }
 
@@ -37,7 +40,10 @@ const deleteUser = async (req : Request, res : Response) => {
         });
 
     } catch (e) {
-        return res.json({error : e});
+        return serverError({
+            res,
+            data: e,
+        })
     }
 }
 

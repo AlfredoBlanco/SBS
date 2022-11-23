@@ -9,13 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const { issue, serverError } = require('../helpers/responses');
 const isAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userRole } = req;
-        return userRole === 1 ? next() : res.json({ error: 'Access denied' });
+        return userRole === 1 ? next() : issue({
+            res,
+            data: 'Access denied',
+            status: 401,
+        });
     }
     catch (e) {
-        return res.json(e);
+        return serverError({
+            res,
+            data: e,
+        });
     }
 });
 module.exports = isAdmin;
