@@ -15,7 +15,7 @@ const validateProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     let error = {};
     if (!title || !/^[a-zA-z ]+$/i.test(title) || title.length < 4)
         error.title = 'The title should have only letters and longer than 4 characters';
-    if (!Number(price))
+    if (!Number(price) || price < 0)
         error.price = 'The price should be a numeric value';
     if (!image || !/^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(image))
         error.image = 'The image should be an url direction';

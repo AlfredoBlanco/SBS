@@ -36,9 +36,7 @@ const success = ({ res, data, status = 200 } : Success) => {
 }
 
 const issue = ({ res, data, status = 400 } : Error) => {
-    return res.status(status).json({
-        error : data,
-    })
+    return res.status(status).send(data);
 }
 
 const serverError = ({ res, data, status = 500 } : Error) => {

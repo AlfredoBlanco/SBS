@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Box, Button, Modal, Typography, ButtonGroup, CircularProgress } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
-
-
+import { useSelector } from 'react-redux';
+import { selectAdmin } from '../../redux/slices/adminSlice';
 
 interface Changes{
     _id ?: string,
@@ -14,13 +14,38 @@ interface Changes{
     stock ?: boolean
 }
 
+interface Error{
+    title ?: boolean,
+    image ?: boolean,
+    description ?: boolean,
+    price ?: boolean
+}
 
-export default function NestModal({changes, add, validate} : {changes : Changes, add ?: boolean, validate : boolean }){
+interface Props{
+    changes : Changes;
+    add ?: boolean;
+    setShowInfo : React.Dispatch<React.SetStateAction<boolean>>;
+}
+interface Admin {
+  token: string | null;
+  name: string | null;
+  role: number | null;
+  loggedIn: boolean;
+}
+
+export default function NestModal({changes, add, setShowInfo} : Props){
+
+    const { token }: Admin = useSelector(selectAdmin);
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleOpen = ()=> {
-        setOpen(true);
+        if(validation()){
+
+            setOpen(true);
+        } else {
+            setShowInfo(true);
+        }
     }
     const handleClose = () => {
         setOpen(false);
@@ -29,25 +54,47 @@ export default function NestModal({changes, add, validate} : {changes : Changes,
     const handleSend = async () => {
         setLoading(true);
         const ans =  add 
-            ? await axios.post(`/add`,{
+            ? await axios.post(`/products`,{
                 ...changes
+            },{
+                headers: { 'Authorization' : `Bearer ${token}`}
+            }).catch((e) => {
+                console.log(e.response);
+                setLoading(false);
             })
-            : await axios.put(`/${changes._id}`,{
+            : await axios.put(`/products/${changes._id}`,{
             ...changes
+            },{
+                headers: { 'Authorization' : `Bearer ${token}`}
+            }).catch((e) => {
+                console.log(e.response);
+                setLoading(false);
             });
 
         if(ans) setTimeout(() => {
             setLoading(false);
+            /* dispatch(getAllProducts()) */
             window.location.reload();
+            console.log(ans)
         }, 2000)
     }
+
+    const validation = () => {
+        let empty : Error = {};
+        if (!changes.title || !/^[a-zA-z ]+$/i.test(changes.title) || changes.title.length < 4) empty.title = true;
+        if (!changes.description || changes.description.length < 10) empty.description = true;
+        if (!changes.image) empty.image = true;
+        if (!changes.price || changes.price <= 0) empty.price = true;
+
+        return Object.keys(empty).length === 0 ? true : false;
+    }
+
     return(
         <>
             <Button 
                 variant='contained'
                 type='submit'
                 onClick={handleOpen}
-                disabled={validate}
             >
                 Revisar
             </Button>
@@ -87,7 +134,7 @@ export default function NestModal({changes, add, validate} : {changes : Changes,
                         alignSelf='flex-start'
                         mt='0.5rem'
                     >
-                        Title : 
+                        Titulo : 
                         </Typography>
                         <Typography
                         variant='body1'
@@ -101,7 +148,7 @@ export default function NestModal({changes, add, validate} : {changes : Changes,
                         alignSelf='flex-start'
                         mt='0.5rem'
                     >
-                        Price : 
+                        Precio : 
                         </Typography>
                         <Typography
                         variant='body1'
@@ -115,7 +162,7 @@ export default function NestModal({changes, add, validate} : {changes : Changes,
                             alignSelf='flex-start'
                             mt='0.5rem'
                         >
-                            Description : 
+                            Descripción : 
                         </Typography>
                         <Typography
                         variant='body1'
@@ -129,7 +176,7 @@ export default function NestModal({changes, add, validate} : {changes : Changes,
                             alignSelf='flex-start'
                             mt='0.5rem'
                         >
-                            Image : 
+                            Imagen : 
                         </Typography>
                         <Typography
                         variant='body1'

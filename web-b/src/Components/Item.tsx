@@ -5,178 +5,188 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import Form from './Form';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { selectAdmin } from '../../redux/slices/adminSlice';
 
-interface Data{
-    _id : string,
-    title : string,
-    image : string,
-    description : string,
-    price : number,
-    stock : boolean
+interface Data {
+  _id: string,
+  title: string,
+  image: string,
+  description: string,
+  price: number,
+  stock: boolean
 }
+interface Admin {
+  token: string | null;
+  name: string | null;
+  role: number | null;
+  loggedIn: boolean;
+}
+export default function Item({ data }: { data: Data }) {
+  const { token }: Admin = useSelector(selectAdmin);
+  const W400 = useMediaQuery('(min-width:400px)');
+  const [open, setOpen] = useState<boolean>(false);
+  const [openSecond, setOpenSecond] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-export default function Item({data} : {data : Data}){
-    const W400 = useMediaQuery('(min-width:400px)');
-    const [open, setOpen] = useState<boolean>(false);
-    const [openSecond, setOpenSecond] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
+  const handleOpen = () => {
+    setOpen(true);
+  }
+  const handleClose = () => {
+    setOpen(false);
+  }
+  const handleOpenSecond = () => {
+    setOpenSecond(true);
+  }
+  const handleCloseSecond = () => {
+    setOpenSecond(false);
+  }
+  const handleSend = async () => {
+    setLoading(true);
+    const ans = await axios.delete(`/products/${data._id}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    if (ans) setTimeout(() => {
+      setLoading(false);
+      window.location.reload()
+    }, 2000)
+  }
 
-    const handleOpen = () =>{
-        setOpen(true);
-    }
-    const handleClose = () =>{
-        setOpen(false);
-    }
-    const handleOpenSecond = () =>{
-        setOpenSecond(true);
-    }
-    const handleCloseSecond = () =>{
-        setOpenSecond(false);
-    }
-    const handleSend = async () => {
-        setLoading(true);
-        const ans = await axios.delete(`/${data._id}`)
-        if (ans) setTimeout(() => {
-          setLoading(false);
-          window.location.reload()
-        }, 2000)
-    }
-
-    return(
+  return (
     <>
-    
-        <Grid 
-          item 
-          xs={12} 
-          key={data._id}
+
+      <Grid
+        item
+        xs={12}
+        key={data._id}
+      >
+        <Box
+          display='flex'
+          width='100%'
+
         >
-            <Box
-              display='flex'
-              width='100%'
 
-            >
 
-          
-            <Box
-              display='flex'
-              flexDirection={W400 ? 'row' : 'column'}
-              justifyContent='space-between'
-              alignItems='center'
-              width={W400 ? '80%' : '60%'}
+          <Box
+            display='flex'
+            flexDirection={W400 ? 'row' : 'column'}
+            justifyContent='space-between'
+            alignItems='center'
+            width={W400 ? '80%' : '60%'}
 
+          >
+            <Typography
+              variant='overline'
+              fontSize={W400 ? 18 : 12}
+              align='center'
             >
-              <Typography
-                variant='overline'
-                fontSize={W400 ? 18 : 12}
-                align='center'
-              >
-                {data.title}
-              </Typography>
-              <Typography
-              >
-                $ {data.price}
-              </Typography>
-            </Box>
-            <Box
-              display='flex'
-              justifyContent='space-evenly'
-              alignItems='center'
-              width='20%'
+              {data.title}
+            </Typography>
+            <Typography
             >
-              <IconButton
-                onClick={handleOpen}
-              >
-                <SettingsIcon />
-              </IconButton>
-              <IconButton
-                onClick={handleOpenSecond}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          </Box> 
-        </Grid>
-        
-        <Modal
-          open={open}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+              $ {data.price}
+            </Typography>
+          </Box>
+          <Box
+            display='flex'
+            justifyContent='space-evenly'
+            alignItems='center'
+            width='20%'
+          >
+            <IconButton
+              onClick={handleOpen}
+            >
+              <SettingsIcon />
+            </IconButton>
+            <IconButton
+              onClick={handleOpenSecond}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </Grid>
+
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{
+          display: 'flex',
+          flexDirection: `${W400 ? 'row' : 'column'}`,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <>
+          <Form data={data} />
+          <Button
+            variant='text'
+            sx={{
+              position: 'absolute',
+              top: `${W400 ? '1rem' : '0.2rem'}`,
+              right: '0.5rem',
+              color: '#fff',
+              border: '1px solid #000',
+
+            }}
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </Button>
+        </>
+      </Modal>
+      <Modal
+        open={openSecond}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{
+          display: 'flex',
+          flexDirection: `${W400 ? 'row' : 'column'}`,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <Box
+          display='flex'
+          flexDirection='column'
+          alignItems='center'
+          justifyContent='space-evenly'
+          minWidth='50vw'
+          minHeight='30vh'
           sx={{
-            display : 'flex',
-            flexDirection : `${W400 ? 'row' : 'column'}`,
-            justifyContent : 'center',
-            alignItems : 'center'
+            bgcolor: '#000',
+            borderRadius: '0.5rem',
+            color: '#fff'
           }}
         >
-            <>
-                <Form data={data} />
-                <Button
-                    variant='text'
-                    sx={{
-                        position : 'absolute',
-                        top : `${W400 ? '1rem' : '0.2rem'}`,
-                        right : '0.5rem',
-                        color : '#fff',
-                        border : '1px solid #000',
-                       
-                    }}
-                    onClick={handleClose}
-                >
-                    <CloseIcon  />
-                </Button>
-            </>
-        </Modal>
-        <Modal
-          open={openSecond}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-          sx={{
-            display : 'flex',
-            flexDirection : `${W400 ? 'row' : 'column'}`,
-            justifyContent : 'center',
-            alignItems : 'center'
-          }}
-        >
-            <Box 
-              display='flex'
-              flexDirection='column'
-              alignItems='center'
-              justifyContent='space-evenly'
-              minWidth='50vw'
-              minHeight='30vh'
-              sx={{
-                bgcolor : '#000',
-                borderRadius : '0.5rem',
-                color : '#fff'
-              }}
+          <Typography
+            variant='h5'
+            align='center'
+            mx='0.5rem'
+          >
+            {loading ? 'Eliminando ' : 'Deseas eliminar el '}producto <br /> <strong>{data.title}</strong> {loading ? '' : '?'}
+          </Typography>
+          <ButtonGroup>
+            <Button
+              variant='outlined'
+              color='error'
+              onClick={handleCloseSecond}
             >
-              <Typography
-                variant='h5'
-                align='center'
-                mx='0.5rem'
-              >
-                {loading ? 'Eliminando ' : 'Deseas eliminar el '}producto <br /> <strong>{data.title}</strong> {loading ? '' : '?' }
-              </Typography>
-              <ButtonGroup>
-                        <Button
-                            variant='outlined'
-                            color='error'
-                            onClick={handleCloseSecond}
-                        >
-                            VOLVER
-                        </Button>
-                        <Button
-                            variant='contained'
-                            onClick={handleSend}
-                            startIcon={<DeleteIcon />}
-                        >
-                          {
-                            loading ? <CircularProgress color='info' /> :  'ELIMINAR'
-                          }  
-                        </Button>
-                    </ButtonGroup>
-            </Box>
-        </Modal>
+              VOLVER
+            </Button>
+            <Button
+              variant='contained'
+              onClick={handleSend}
+              startIcon={<DeleteIcon />}
+            >
+              {
+                loading ? <CircularProgress color='info' /> : 'ELIMINAR'
+              }
+            </Button>
+          </ButtonGroup>
+        </Box>
+      </Modal>
     </>
-    )
+  )
 }

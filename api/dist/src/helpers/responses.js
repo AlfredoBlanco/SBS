@@ -6,9 +6,7 @@ const success = ({ res, data, status = 200 }) => {
     });
 };
 const issue = ({ res, data, status = 400 }) => {
-    return res.status(status).json({
-        error: data,
-    });
+    return res.status(status).send(data);
 };
 const serverError = ({ res, data, status = 500 }) => {
     return res.status(status).json({

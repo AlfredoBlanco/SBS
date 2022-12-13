@@ -46,7 +46,11 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             })
             : success({
                 res,
-                data: token,
+                data: {
+                    token,
+                    name: logged.name,
+                    role: logged.role,
+                },
             });
     }
     catch (e) {

@@ -1,8 +1,9 @@
-import { Box, Checkbox, FormControl,
+import { Box, Checkbox, FormControl, IconButton,
     InputLabel, Input, FormHelperText,
     useMediaQuery, Typography } from '@mui/material';
 import { useState } from 'react';
 import NestModal from './NestModal';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 
 interface Data{
@@ -23,16 +24,10 @@ interface Changes{
     stock ?: boolean
 }
 
-interface Error{
-    title ?: boolean,
-    image ?: boolean,
-    description ?: boolean,
-    price ?: boolean
-}
 
 export default function Form({data, add} : {data ?: Data, add ?: boolean}){
     const W400 = useMediaQuery('(min-width:400px)');
-    const [check, setCheck] = useState<boolean>(true);
+    const [showInfo, setShowInfo] = useState<boolean>(false);
     const [changes, setChanges] = useState<Changes>(data ? data : {title : '',
         image : '',
         description : '',
@@ -52,20 +47,11 @@ export default function Form({data, add} : {data ?: Data, add ?: boolean}){
                 [e.target.name] : e.target.value
             })
         }
-        handleCheck()
     }
     
-    const handleCheck = () => {
-        let empty : Error = {};
-        if (!changes.title) empty.title = true;
-        if (!changes.description) empty.description = true;
-        if (!changes.image) empty.image = true;
-        if (!changes.price || changes.price <= 0) empty.price = true;
-
-        Object.keys(empty).length === 0 ? setCheck(false) : setCheck(true)
-    }
     return(
         <Box 
+            position = 'relative'
             display = 'flex'
             flexDirection = 'column'
             alignItems = 'center'
@@ -75,16 +61,29 @@ export default function Form({data, add} : {data ?: Data, add ?: boolean}){
                 borderRadius : '1rem'
             }}
             >
+            <IconButton 
+                aria-label='info'
+                sx={{
+                    position : 'absolute',
+                    top : '2px',
+                    right : '2px',
+                }}
+                onClick={() => setShowInfo(!showInfo)}
+                >
+                <QuestionMarkIcon />
+            </IconButton>
             <Typography
                 variant='h5'
                 align='center'
+                marginTop = '2px'
             >
-                Debes llenar todos los campos 
+                Nuevo producto
             </Typography>   
             <FormControl
                 sx={{
                     marginY : '1rem',
-                    width : `${W400 ? '80%' : '90%'}`
+                    width : `${W400 ? '80%' : '90%'}`,
+                    color : 'rgba(0,0,0,0.7)'
                 
                 }}
             >
@@ -93,40 +92,60 @@ export default function Form({data, add} : {data ?: Data, add ?: boolean}){
                 fullWidth={true}
                 value={changes.title} 
                 onChange={handleChange} />
+                <Typography
+                    display = {showInfo ? 'block' : 'none'}
+                >
+                    El nombre debe tener al menos 4 caracteres
+                </Typography>
             </FormControl>
             <FormControl
                 sx={{
                     marginY : '1rem',
-                    width : `${W400 ? '80%' : '90%'}`
+                    width : `${W400 ? '80%' : '90%'}`,
+                    color : 'rgba(0,0,0,0.7)'
                 }}
             >
               <InputLabel htmlFor="price-input">Precio</InputLabel>
               <Input id="price-input" name='price' type='number' value={changes.price} 
                 onChange={handleChange} />
+              <Typography
+                  display = {showInfo ? 'block' : 'none'}
+                >
+                  El precio debe ser mayor a cero
+              </Typography>
             </FormControl>
             <FormControl
                 sx={{
                     marginY : '1rem',
-                    width : `${W400 ? '80%' : '90%'}`
+                    width : `${W400 ? '80%' : '90%'}`,
+                    color : 'rgba(0,0,0,0.7)'
                 }}
             >
               <InputLabel htmlFor="description-input">Descripcion</InputLabel>
               <Input id="description-input" name='description' type='text' value={changes.description} 
                 onChange={handleChange} />
+                <Typography
+                    display = {showInfo ? 'block' : 'none'}
+                >
+                    La descripción debe tener al menos 10 caracteres
+                </Typography>
             </FormControl>
             <FormControl
                 sx={{
                     marginY : '1rem',
-                    width : `${W400 ? '80%' : '90%'}`
+                    width : `${W400 ? '80%' : '90%'}`,
+                    color : 'rgba(0,0,0,0.7)'
                 }}
             >
               <InputLabel htmlFor="image-input">Imagen</InputLabel>
               <Input id="image-input" name='image' type='url' value={changes.image} 
                 onChange={handleChange} 
                 aria-describedby="image-helper" />
-              <FormHelperText id="image-helper">
-                Introduzca la dirección  de una imagen.
-              </FormHelperText>
+              <Typography
+                    display = {showInfo ? 'block' : 'none'}
+                >
+                    La imagen debe ser una dirección url válida
+                </Typography>
             </FormControl>
             <FormControl
                 sx={{
@@ -138,11 +157,8 @@ export default function Form({data, add} : {data ?: Data, add ?: boolean}){
               <Checkbox id="stock-input" name='stock' 
                 onChange={handleChange} checked={changes?.stock ? true : false} />
             </FormControl>
-            <NestModal changes={changes} add={add} validate={check} />
+            <NestModal changes={changes} add={add} setShowInfo={setShowInfo} />
             
-            
-            
-
         </Box>
     )
 }
