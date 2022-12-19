@@ -13,7 +13,7 @@ const { User } = require('../models');
 const { success, serverError } = require('../helpers/responses');
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield User.find();
+        const users = yield User.find().select('-password');
         return success({
             res,
             data: users

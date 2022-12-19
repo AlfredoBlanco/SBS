@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
-import { logIn } from  '../../redux/slices/adminSlice';
+import { logIn } from  '../../redux/slices/userSlice';
 
 interface AdminLogin {
     email: string;

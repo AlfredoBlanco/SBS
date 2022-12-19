@@ -5,8 +5,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import Form from './Form';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { selectAdmin } from '../../redux/slices/adminSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAdmin } from '../../redux/slices/userSlice';
+import type { AppDispatch } from  '../../redux/store';
+import { getAllProducts } from '../../redux/slices/productSlice';
+import DeleteModal from './DeleteModal';
+
 
 interface Data {
   _id: string,
@@ -16,40 +20,18 @@ interface Data {
   price: number,
   stock: boolean
 }
-interface Admin {
-  token: string | null;
-  name: string | null;
-  role: number | null;
-  loggedIn: boolean;
-}
+
 export default function Item({ data }: { data: Data }) {
-  const { token }: Admin = useSelector(selectAdmin);
+  const dispatch = useDispatch<AppDispatch>();
   const W400 = useMediaQuery('(min-width:400px)');
   const [open, setOpen] = useState<boolean>(false);
-  const [openSecond, setOpenSecond] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const handleOpen = () => {
     setOpen(true);
   }
   const handleClose = () => {
+    dispatch(getAllProducts())
     setOpen(false);
-  }
-  const handleOpenSecond = () => {
-    setOpenSecond(true);
-  }
-  const handleCloseSecond = () => {
-    setOpenSecond(false);
-  }
-  const handleSend = async () => {
-    setLoading(true);
-    const ans = await axios.delete(`/products/${data._id}`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
-    if (ans) setTimeout(() => {
-      setLoading(false);
-      window.location.reload()
-    }, 2000)
   }
 
   return (
@@ -98,11 +80,7 @@ export default function Item({ data }: { data: Data }) {
             >
               <SettingsIcon />
             </IconButton>
-            <IconButton
-              onClick={handleOpenSecond}
-            >
-              <DeleteIcon />
-            </IconButton>
+            <DeleteModal data={data} />
           </Box>
         </Box>
       </Grid>
@@ -135,57 +113,6 @@ export default function Item({ data }: { data: Data }) {
             <CloseIcon />
           </Button>
         </>
-      </Modal>
-      <Modal
-        open={openSecond}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        sx={{
-          display: 'flex',
-          flexDirection: `${W400 ? 'row' : 'column'}`,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        <Box
-          display='flex'
-          flexDirection='column'
-          alignItems='center'
-          justifyContent='space-evenly'
-          minWidth='50vw'
-          minHeight='30vh'
-          sx={{
-            bgcolor: '#000',
-            borderRadius: '0.5rem',
-            color: '#fff'
-          }}
-        >
-          <Typography
-            variant='h5'
-            align='center'
-            mx='0.5rem'
-          >
-            {loading ? 'Eliminando ' : 'Deseas eliminar el '}producto <br /> <strong>{data.title}</strong> {loading ? '' : '?'}
-          </Typography>
-          <ButtonGroup>
-            <Button
-              variant='outlined'
-              color='error'
-              onClick={handleCloseSecond}
-            >
-              VOLVER
-            </Button>
-            <Button
-              variant='contained'
-              onClick={handleSend}
-              startIcon={<DeleteIcon />}
-            >
-              {
-                loading ? <CircularProgress color='info' /> : 'ELIMINAR'
-              }
-            </Button>
-          </ButtonGroup>
-        </Box>
       </Modal>
     </>
   )

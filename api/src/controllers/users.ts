@@ -7,14 +7,13 @@ interface Users {
     _id : string;
     name : string;
     email : string;
-    password : string;
     role : number;
 }
 
 const getAllUsers = async (req : Request, res : Response) => {
     try{
 
-        const users : Users[] = await User.find();
+        const users : Users[] = await User.find().select('-password');
         return success({
             res,
             data : users

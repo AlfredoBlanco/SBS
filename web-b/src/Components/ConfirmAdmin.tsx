@@ -2,23 +2,18 @@ import { useState } from "react";
 import { Box, Button, Modal, Typography, ButtonGroup, CircularProgress } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { selectAdmin } from '../../redux/slices/userSlice';
 
-interface Changes{
-    _id ?: string,
-    title ?: string,
-    image ?: string,
-    description ?: string,
-    price ?: number,
-    stock ?: boolean
+interface Changes {
+    name: string,
+    email: string,
+    password: string,
+    passwordConfirm: string,
 }
 
 interface Error{
-    title ?: boolean,
-    image ?: boolean,
-    description ?: boolean,
-    price ?: boolean
+    name ?: boolean,
+    email ?: boolean,
+    password ?: boolean,
 }
 
 interface Props{
@@ -27,15 +22,13 @@ interface Props{
     setShowInfo : React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function NestModal({changes, add, setShowInfo} : Props){
+export default function ConfirmAdmin({changes, setShowInfo} : Props){
 
-    const { loggedAdmin: { token } } = useSelector(selectAdmin);
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleOpen = ()=> {
         if(validation()){
-
             setOpen(true);
         } else {
             setShowInfo(true);
@@ -47,40 +40,26 @@ export default function NestModal({changes, add, setShowInfo} : Props){
     
     const handleSend = async () => {
         setLoading(true);
-        const ans =  add 
-            ? await axios.post(`/products`,{
+        const ans = await axios.post(`/auth/register`,{
                 ...changes
-            },{
-                headers: { 'Authorization' : `Bearer ${token}`}
             }).catch((e) => {
                 console.log(e.response);
                 setLoading(false);
             })
-            : await axios.put(`/products/${changes._id}`,{
-            ...changes
-            },{
-                headers: { 'Authorization' : `Bearer ${token}`}
-            }).catch((e) => {
-                console.log(e.response);
-                setLoading(false);
-            });
 
         if(ans) setTimeout(() => {
             setLoading(false);
-            /* window.location.reload(); */
             setOpen(false);
-            /* console.log(ans) */
         }, 2000)
     }
 
     const validation = () => {
-        let empty : Error = {};
-        if (!changes.title || !/^[a-zA-z ]+$/i.test(changes.title) || changes.title.length < 4) empty.title = true;
-        if (!changes.description || changes.description.length < 10) empty.description = true;
-        if (!changes.image || !/^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(changes.image)) empty.image = true;
-        if (!changes.price || changes.price <= 0) empty.price = true;
+        let error : Error = {};
+        if(!changes.name || !/^[a-zA-z ]+$/i.test(changes.name) || changes.name.length < 4) error.name = true;
+        if(!changes.email || !/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i.test(changes.email)) error.email = true;
+        if(!changes.password || changes.password !== changes.passwordConfirm) error.password = true;
 
-        return Object.keys(empty).length === 0 ? true : false;
+        return Object.keys(error).length === 0 ? true : false;
     }
 
     return(
@@ -120,7 +99,7 @@ export default function NestModal({changes, add, setShowInfo} : Props){
                         my='1rem'
                         align='center'
                     >
-                        Confirme para {add ? 'Agregar' : 'Actualizar'}
+                        Confirme para Agregar
                     </Typography>
                     <>
                         <Typography
@@ -128,12 +107,12 @@ export default function NestModal({changes, add, setShowInfo} : Props){
                         alignSelf='flex-start'
                         mt='0.5rem'
                     >
-                        Titulo : 
+                        Nombre : 
                         </Typography>
                         <Typography
                         variant='body1'
                     >
-                        {changes.title}
+                        {changes.name}
                         </Typography>
                     </>
                     <>
@@ -142,12 +121,12 @@ export default function NestModal({changes, add, setShowInfo} : Props){
                         alignSelf='flex-start'
                         mt='0.5rem'
                     >
-                        Precio : 
+                        Email : 
                         </Typography>
                         <Typography
                         variant='body1'
                     >
-                       $ {changes.price}
+                       {changes.email}
                         </Typography>
                     </>
                     <>
@@ -156,42 +135,15 @@ export default function NestModal({changes, add, setShowInfo} : Props){
                             alignSelf='flex-start'
                             mt='0.5rem'
                         >
-                            Descripción : 
+                            Rol : 
                         </Typography>
                         <Typography
                         variant='body1'
                     >
-                        {changes.description}
+                            Administrador
                         </Typography>
                     </>
-                    <>
-                        <Typography
-                            variant="body2"
-                            alignSelf='flex-start'
-                            mt='0.5rem'
-                        >
-                            Imagen : 
-                        </Typography>
-                        <Typography
-                        variant='body1'
-                    >
-                        {changes.image?.slice(0,20)}...
-                        </Typography>
-                    </>
-                    <>
-                        <Typography
-                            variant="body2"
-                            alignSelf='flex-start'
-                            mt='0.5rem'
-                        >
-                            Stock : 
-                        </Typography>
-                        <Typography
-                        variant='body1'
-                    >
-                        {changes.stock ? 'Hay stock' : 'No hay stock'}
-                        </Typography>
-                    </>
+                    
                     <ButtonGroup>
                         <Button
                             variant='outlined'
