@@ -1,12 +1,9 @@
-import { Box, Grid, Typography, IconButton, useMediaQuery, Modal, Button, ButtonGroup, CircularProgress } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, Grid, Typography, IconButton, useMediaQuery, Modal, Button } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import Form from './Form';
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectAdmin } from '../../redux/slices/userSlice';
+import { useDispatch } from 'react-redux';
 import type { AppDispatch } from  '../../redux/store';
 import { getAllProducts } from '../../redux/slices/productSlice';
 import DeleteModal from './DeleteModal';
@@ -45,7 +42,8 @@ export default function Item({ data }: { data: Data }) {
         <Box
           display='flex'
           width='100%'
-
+          justifyContent='space-evenly'
+      
         >
 
 
@@ -54,8 +52,7 @@ export default function Item({ data }: { data: Data }) {
             flexDirection={W400 ? 'row' : 'column'}
             justifyContent='space-between'
             alignItems='center'
-            width={W400 ? '80%' : '60%'}
-
+            width={W400 ? '80%' : '50%'}
           >
             <Typography
               variant='overline'

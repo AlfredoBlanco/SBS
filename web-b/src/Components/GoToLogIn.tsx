@@ -1,5 +1,4 @@
-import { Box, Grid, Typography, Modal, Button, useMediaQuery, IconButton,
-    Collapse, Link, List, ListItemButton, ListItemText, ListItemIcon, Divider } from '@mui/material';
+import { Box, Typography, Button, Link } from '@mui/material';
 
 export default function GoToLogIn(){
     return (

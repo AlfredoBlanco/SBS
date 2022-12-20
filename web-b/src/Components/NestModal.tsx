@@ -67,9 +67,7 @@ export default function NestModal({changes, add, setShowInfo} : Props){
 
         if(ans) setTimeout(() => {
             setLoading(false);
-            /* window.location.reload(); */
             setOpen(false);
-            /* console.log(ans) */
         }, 2000)
     }
 

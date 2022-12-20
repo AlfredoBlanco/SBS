@@ -31,7 +31,7 @@ const deleteUser = async (req : Request, res : Response) => {
 
         const id : string = req.params.id;
         
-        await User.deleteOne({_id : id});
+        await User.deleteOne({_id : id, role: 2});
         
         return success({
             res,

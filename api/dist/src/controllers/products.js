@@ -28,7 +28,7 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { title, price, image, description, stock } = req.body;
+        const { title, price, image, description, stock = false } = req.body;
         yield newProduct({ title, price, image, description, stock });
         return success({
             res,

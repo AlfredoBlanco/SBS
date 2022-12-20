@@ -1,19 +1,21 @@
-import { Alert, Box, Typography, Modal, Button, useMediaQuery, IconButton,
-    FormControl, Input, InputLabel, Snackbar, LinearProgress } from '@mui/material';
+import {
+    Alert, Box, Typography, Modal, Button, useMediaQuery, IconButton,
+    FormControl, Input, InputLabel, Snackbar, LinearProgress
+} from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
-import { logIn } from  '../../redux/slices/userSlice';
+import { logIn } from '../../redux/slices/userSlice';
 
 interface AdminLogin {
     email: string;
     password: string;
 }
 interface Notice {
-    open : boolean;
-    message : string;
+    open: boolean;
+    message: string;
 }
 
 export default function Login() {
@@ -26,13 +28,13 @@ export default function Login() {
     const [notification, setNotification] = useState<Notice>({
         open: false,
         message: '',
-    }); 
+    });
     const [loading, setLoading] = useState<boolean>(false);
 
-    const handleChange = ({ target } : React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
         setInfo({
             ...info,
-            [target.name] : target.value
+            [target.name]: target.value
         })
     }
 
@@ -40,7 +42,8 @@ export default function Login() {
         open: false,
         message: '',
     });
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
         setLoading(true);
         const user = await axios.post('/auth/login', { ...info })
             .then(r => r.data.data)
@@ -51,8 +54,8 @@ export default function Login() {
                 });
             });
 
-        if(user) {
-            if(user.role === 1){
+        if (user) {
+            if (user.role === 1) {
 
                 window.localStorage.setItem(
                     'LoggedAdmin', JSON.stringify(user)
@@ -66,88 +69,93 @@ export default function Login() {
                 });
             }
         }
-        
+
         setLoading(false)
     }
 
     return (
-        <Box 
-            position = 'relative'
-            display = 'flex'
-            alignItems = 'center'
+        <Box
+            position='relative'
+            display='flex'
+            alignItems='center'
             justifyContent='center'
-            width = '100vw'
-            height = '100vh'
+            width='100vw'
+            height='100vh'
             sx={{
-                backgroundColor : '#edf2fb',
+                backgroundColor: '#edf2fb',
             }}
-            >
-            <Box
-                display = 'flex'
-                flexDirection='column'
-                alignItems = 'center'
-                justifyContent='center'
-                width={W700 ? '40%' : '80%'}
-                height='max-content'
-            >
-                <Typography
-                variant='h3'
-                align='center'
-                color='#6a21d2'
+        >
+            <form
+                style={{
+                    'display': 'flex',
+                    'flexDirection': 'column',
+                    'alignItems': 'center',
+                    'justifyContent': 'center',
+                    'width': `${W700 ? '40%' : '80%'}`,
+                    'height': 'max-content',
+                }}
+                onSubmit={handleSubmit}
 
             >
-                Inicie sesión
+                <Typography
+                    variant='h3'
+                    align='center'
+                    color='#6a21d2'
+
+                >
+                    Inicie sesión
                 </Typography>
                 <FormControl
                     sx={{
-                        marginY : '1rem',
-                        width : '90%',
+                        marginY: '1rem',
+                        width: '90%',
                     }}
                 >
-                  <InputLabel htmlFor="name-input">Email</InputLabel>
-                  <Input id="email-input" name='email' value={info.email} fullWidth={true} 
-                    onChange={handleChange} />
+                    <InputLabel htmlFor="name-input">Email</InputLabel>
+                    <Input id="email-input" name='email' value={info.email} fullWidth={true}
+                        onChange={handleChange} />
                 </FormControl>
-                
+
                 <FormControl
                     sx={{
-                        marginY : '1rem',
-                        width : '90%'
+                        marginY: '1rem',
+                        width: '90%'
                     }}
                 >
-                  <InputLabel htmlFor="password-input">Contraseña</InputLabel>
-                  <Input id="image-input" name='password' type='password' value={info.password} 
-                    onChange={handleChange} />
-              
+                    <InputLabel htmlFor="password-input">Contraseña</InputLabel>
+                    <Input id="image-input" name='password' type='password' value={info.password}
+                        onChange={handleChange} />
+
                 </FormControl>
                 {
                     loading
-                    ? (
-                        <LinearProgress
-                            color='secondary'
-                            sx={{
-                                height : '3px',
-                                width : '90%',
-                            }}
-                        />
-                    )
-                    : (
-                        <Button
-                            onClick={handleSubmit}
-                            sx={{color : '#6a21d2'}}
-                        >
-                            ENTRAR
-                        </Button>
-                    )
+                        ? (
+                            <LinearProgress
+                                color='secondary'
+                                sx={{
+                                    height: '3px',
+                                    width: '90%',
+                                }}
+                            />
+                        )
+                        : (
+                            <Button
+                                type='submit'
+                                
+                                sx={{ color: '#6a21d2' }}
+                            >
+                                ENTRAR
+                            </Button>
+                        )
                 }
-                
-            </Box>
+
+            </form>
             <Snackbar
-              open={notification.open}
-              autoHideDuration={3000}
-              onClose={handleClose}
+                open={notification.open}
+                autoHideDuration={3000}
+                onClose={handleClose}
             >
-                <Alert 
+                <Alert
                     onClose={handleClose}
                     severity='error'
                     sx={{

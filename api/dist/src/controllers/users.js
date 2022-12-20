@@ -29,7 +29,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
-        yield User.deleteOne({ _id: id });
+        yield User.deleteOne({ _id: id, role: 2 });
         return success({
             res,
             data: 'Deleted successfully',

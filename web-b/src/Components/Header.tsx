@@ -5,7 +5,8 @@ import { Box, Button, Collapse, Divider, List, ListItemButton, ListItemText, Typ
 import Router from 'next/router';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logOut, selectAdmin } from '../../redux/slices/userSlice';
+import { logOut, selectAdmin, getAllUsers } from '../../redux/slices/userSlice';
+import { getAllProducts } from '../../redux/slices/productSlice';
 import { AppDispatch } from "../../redux/store";
 
 interface Props {
@@ -26,6 +27,16 @@ export default function Header({ users } : Props) {
       dispatch(logOut());
     
     }
+    const handleRefresh = () => {
+      if(users) {
+
+        dispatch(getAllUsers(loggedAdmin.token));
+      } else {
+
+        dispatch(getAllProducts());
+      }
+    
+    }
 
     return (
         <Box
@@ -34,6 +45,7 @@ export default function Header({ users } : Props) {
           alignSelf='flex-end'
           display='flex'
           flexDirection='column'
+          zIndex='100'
         >
           <Box
             display='flex'
@@ -95,10 +107,20 @@ export default function Header({ users } : Props) {
                 }}
               >
                 <ListItemText
-                    primary={users? 'productos' : 'usuarios'}
+                  primary={users? 'Productos' : 'Usuarios'}
                 />
               </ListItemButton>
               <Divider />
+              <ListItemButton
+                onClick={handleRefresh}
+                sx={{
+                  padding: '0px 1rem',
+                }}
+              >
+                <ListItemText
+                  primary="Refrescar"
+                />
+              </ListItemButton>
               <ListItemButton
                 onClick={handleLogOut}
                 sx={{

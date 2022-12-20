@@ -36,7 +36,7 @@ const getAllProducts = async (req : Request, res : Response) => {
 const createProduct = async (req : Request, res : Response) => {
     try{
 
-        const { title, price, image, description, stock } : ProductBody = req.body;
+        const { title, price, image, description, stock = false } : ProductBody = req.body;
 
         await newProduct({ title, price, image, description, stock});
         

@@ -23,8 +23,8 @@ export default function List({ products, users } : Props) {
     return (
         <Grid
           container
-          width={W400 ? '80vw' : '100vw'}
-          p={W400 ? '0.2rem' : '1rem'}
+          width={W400 ? '80vw' : '90vw'}
+          p='0.2rem'
           sx={{
             boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)',
             borderRadius: '1rem'

@@ -8,7 +8,6 @@ import { AppDispatch } from "../redux/store";
 import { Box, Button, Typography } from "@mui/material";
 import AddAdmin from "../src/Components/AddAdmin";
 
-/* Agregar en back que se pueda eliminar admin si sos vos */
 
 export default function Admin() {
     const { loggedAdmin, users } = useSelector(selectAdmin);
@@ -32,6 +31,7 @@ export default function Admin() {
 
                 <Typography
                     variant='h3'
+                    align='center'
                 >
                     Listado de usuarios
                 </Typography>
