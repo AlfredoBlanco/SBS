@@ -4,18 +4,14 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 import { useState } from 'react';
+import { Data } from  '../redux/features/productSlice';
 
 
-interface Data{
-    _id : string,
-    title ?: string,
-    image ?: string,
-    description ?: string,
-    price ?: number,
-    stock ?: boolean
+interface Props {
+    data?: Data
 }
 
-export default function Card({data} : {data : Data}) {
+export default function Card({ data } : Props) {
     const W1000 = useMediaQuery('(min-width:1000px)');
     const W750 = useMediaQuery('(min-width:750px)');
     const W500 = useMediaQuery('(min-width:500px)');
@@ -34,13 +30,13 @@ export default function Card({data} : {data : Data}) {
           m={2}
           width={W500 ? W750 ? W1000 ? '30%' : '45%' : '70%' : '100%'}
           sx={{height : '20rem', 
-            backgroundImage : `url(${data.image})`,
+            backgroundImage : `url(${data?.image})`,
             backgroundPosition : 'center',
             backgroundSize : 'cover',
             borderRadius : '1rem',
             overflow : 'hidden'
         }}
-          key={data._id}
+          key={data?._id}
         >
             <Box
                 display='flex'
@@ -75,7 +71,7 @@ export default function Card({data} : {data : Data}) {
                     align='center'
                 >
                     {
-                        data.title
+                        data?.title
                         ? `${data.title}`
                         : ( <Skeleton variant='text' sx={{width : '10rem'}} />)
                     }
@@ -84,7 +80,7 @@ export default function Card({data} : {data : Data}) {
                     variant='caption'
                 >
                     {
-                        data.price
+                        data?.price
                         ? `$ ${data.price}`
                         : ( <Skeleton variant='text' sx={{width : '10rem'}} />)
                     }
@@ -95,7 +91,7 @@ export default function Card({data} : {data : Data}) {
                     mx={2}
                 >
                  {
-                    data.description
+                    data?.description
                     ? `${data.description}`
                     : ( <Skeleton variant='text' sx={{width : '10rem'}} />)
                 }
@@ -107,12 +103,12 @@ export default function Card({data} : {data : Data}) {
                     sx={({
                         position : 'absolute',
                         bottom : '0',
-                        backgroundColor : `${data.stock ? green[600] : red[600]}`,
+                        backgroundColor : `${data?.stock ? green[600] : red[600]}`,
                         borderRadius : '1rem',
                         color : `${grey[100]}`
                     })}
                 >
-                    {data.stock ? 'Hay stock' : 'No hay  stock'}
+                    {data?.stock ? 'Hay stock' : 'No hay  stock'}
                   </Typography>
             
             </Box>
@@ -148,7 +144,7 @@ export default function Card({data} : {data : Data}) {
                     >
                         <CloseFullscreenIcon color="info" />
                     </IconButton>
-                    <img src={data.image} alt='Not found' width={'300'} />
+                    <img src={data?.image} alt='Not found' width={'300'} />
                     <Box
                         display='flex'
                         flexDirection='column'
@@ -162,19 +158,19 @@ export default function Card({data} : {data : Data}) {
                             align='center'
                             mt='1rem'
                         >
-                            {data.title}
+                            {data?.title}
                         </Typography>
                         <Typography
                             variant='caption'
                         >
-                            ${data.price}
+                            ${data?.price}
                         </Typography>
                         <Typography
                             variant='body2'
                             mb='1rem'
                             align='center'
                         >
-                            {data.description}
+                            {data?.description}
                         </Typography>
 
                     </Box>

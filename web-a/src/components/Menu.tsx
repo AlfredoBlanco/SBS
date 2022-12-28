@@ -1,9 +1,10 @@
-import { Box, Button, Slide, useMediaQuery } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slide, Typography, useMediaQuery } from "@mui/material";
 import { useState } from "react";
-import MenuItem from '../components/MenuItem';
+import TextItem from './TextItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-
+import OrderSelect from "./OrderSelect";
+import grey from '@mui/material/colors/grey';
 
 
 export default function Menu() {
@@ -26,7 +27,9 @@ export default function Menu() {
                 sx={{
                     position: 'absolute',
                     top: '1rem',
-                    left: '1rem'
+                    left: '1rem',
+                    bgcolor: grey[100],
+                    zIndex: '90',
                 }}
 
             >
@@ -49,6 +52,7 @@ export default function Menu() {
                         display='flex'
                         flexDirection='column'
                         alignItems='center'
+                        justifyContent='space-between'
                         width={W500 ? W850 ? '40%' : '50%' : '100%'}
                         sx={{
                             background: 'rgba(0, 0, 0, 0.9)',
@@ -58,29 +62,45 @@ export default function Menu() {
                             transition: 'all 0.3s ease-in-out',
                         }}
                     >
-                        <Button
-                            onClick={handleClose}
-                            variant='outlined'
-                            color='primary'
-                            sx={{
-                                alignSelf: 'flex-end',
-                                margin: '0.5rem'
-                            }}
-                        >
-                            <CloseIcon />
-                        </Button>
                         <Box
+                            display='flex'
+                            flexDirection='column'
+                            alignItems='center'
                             width='100%'
-                            onClick={handleClose}
                         >
 
-                            <MenuItem data={'Sobre Nosostros'} />
+                            <Button
+                                onClick={handleClose}
+                                variant='outlined'
+                                color='primary'
+                                sx={{
+                                    alignSelf: 'flex-end',
+                                    margin: '0.5rem'
+                                }}
+                            >
+                                <CloseIcon />
+                            </Button>
+                            <OrderSelect setOpen={setOpen} />
                         </Box>
                         <Box
+                            display='flex'
+                            flexDirection='column'
+                            alignItems='center'
                             width='100%'
-                            onClick={handleClose}
                         >
-                            <MenuItem data={'Contacto'} />
+                            <Box
+                                width='100%'
+                                onClick={handleClose}
+                            >
+
+                                <TextItem data={'Sobre Nosostros'} />
+                            </Box>
+                            <Box
+                                width='100%'
+                                onClick={handleClose}
+                            >
+                                <TextItem data={'Contacto'} />
+                            </Box>
                         </Box>
                     </Box>
                 </Box>

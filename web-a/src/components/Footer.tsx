@@ -22,15 +22,9 @@ export default function Footer() {
                 color='primary'
                 align='center'
             >
-                Developer : <strong>Alfredo Blanco</strong>
+                Revisar este footer de mierdaa
             </Typography>
-            <Typography 
-                variant='body1'
-                color='primary'
-                align='center'
-            >
-                Fecha de Deploy : <strong>12/08/22</strong>
-            </Typography>
+            
 
         </Box>
     )

@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography';
 
 
-export default function MenuItem({data } : {data : string}) {
+export default function TextItem({data } : {data : string}) {
     return (
     
         <Typography 
