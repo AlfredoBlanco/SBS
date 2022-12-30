@@ -1,13 +1,18 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slide, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Link, Slide, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import TextItem from './TextItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import OrderSelect from "./OrderSelect";
-import grey from '@mui/material/colors/grey';
+import { grey } from '@mui/material/colors';
+import { logOut, selectUser } from '../../src/redux/features/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../src/redux/store';
 
 
 export default function Menu() {
+    const { loggedUser } = useSelector(selectUser);
+    const dispatch = useDispatch<AppDispatch>();
     const [open, setOpen] = useState<boolean>(false);
     const W850 = useMediaQuery('(min-width:750px)');
     const W500 = useMediaQuery('(min-width:500px)');
@@ -17,6 +22,10 @@ export default function Menu() {
     }
     const handleClose = () => {
         setOpen(false);
+    }
+    const handleLogOut = () => {
+        window.localStorage.removeItem('LoggedUser')
+        dispatch(logOut());
     }
     return (
         <>
@@ -88,23 +97,30 @@ export default function Menu() {
                             alignItems='center'
                             width='100%'
                         >
-                            <Box
-                                width='100%'
-                                onClick={handleClose}
-                            >
+                            <TextItem data={'Sobre Nosostros'} handleClose={handleClose} />
+                            <TextItem data={'Contacto'} handleClose={handleClose} />
+                            {
+                                loggedUser.loggedIn
+                                    ? (
+                                        <Box width='100%' onClick={handleLogOut}>
 
-                                <TextItem data={'Sobre Nosostros'} />
-                            </Box>
-                            <Box
-                                width='100%'
-                                onClick={handleClose}
-                            >
-                                <TextItem data={'Contacto'} />
-                            </Box>
+                                            <TextItem data={'Cierre sesión'} handleClose={handleClose} />
+                                        </Box>
+                                    )
+                                    : (
+                                        <Link href={'/auth/login'} underline='none' width='100%'>
+
+                                            <TextItem data={'Inicie sesión'} handleClose={handleClose} />
+                                        </Link>
+                                    )
+                            }
+
+
+
                         </Box>
                     </Box>
                 </Box>
-
+                {/* YA tengo para que se logee si esta el localstorage y lo saco, implementar el redux ahora */}
             </Slide>
         </>
     )

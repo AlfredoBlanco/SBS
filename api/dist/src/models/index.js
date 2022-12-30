@@ -6,7 +6,7 @@ const ProductSchema = new Schema({
     price: { type: Number, required: true },
     image: { type: String, required: true },
     description: { type: String, required: true },
-    stock: { type: Boolean, required: true }
+    stock: { type: Number, required: true }
 });
 const UserSchema = new Schema({
     name: { type: String, required: true },

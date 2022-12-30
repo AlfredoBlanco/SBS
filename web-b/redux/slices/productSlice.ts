@@ -8,7 +8,7 @@ export interface Data{
   image : string,
   description : string,
   price : number,
-  stock : boolean
+  stock : number
 }
 
 export interface ProductState{

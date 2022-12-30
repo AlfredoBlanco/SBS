@@ -5,8 +5,10 @@ import socket from '../src/socket';
 import Footer from '../src/components/Footer';
 import Card from '../src/components/Card';
 import Menu from  '../src/components/Menu';
+import Header from  '../src/components/Header';
 import { Data } from  '../src/redux/features/productSlice';
 import { getAllProducts, selectProducts } from '../src/redux/features/productSlice';
+import { logIn, selectUser } from '../src/redux/features/userSlice';
 import { useSelector, useDispatch } from  'react-redux';
 import { AppDispatch } from '../src/redux/store';
 
@@ -27,7 +29,8 @@ const Home: NextPage = () => {
   useEffect(() => {
 
     dispatch(getAllProducts());
-    
+    let loggedUser = window.localStorage.getItem('LoggedUser');
+    if(loggedUser) dispatch(logIn(JSON.parse(loggedUser)))
   }, [])
 
   return (
@@ -40,6 +43,8 @@ const Home: NextPage = () => {
       sx={{ width: '100vw', height: '100vh', overflowX: 'hidden' }}
     >
       <Menu />
+
+      <Header />
 
       <Typography
         variant='h2'

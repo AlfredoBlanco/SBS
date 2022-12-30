@@ -7,17 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllUsers, selectAdmin } from '../../redux/slices/userSlice';
 import type { AppDispatch } from  '../../redux/store';
 import type { User } from "../../redux/slices/userSlice";
+import type { Data } from "../../redux/slices/productSlice";
 
-
-
-interface Data {
-  _id: string,
-  title: string,
-  image: string,
-  description: string,
-  price: number,
-  stock: boolean
-}
 
 interface Props{
     data?: Data;
@@ -52,6 +43,7 @@ export default function DeleteModal({ data, user }: Props) {
         ? dispatch(getAllUsers(token))
         : dispatch(getAllProducts());
         setLoading(false);
+        handleClose();
       }, 2000)
     }
 

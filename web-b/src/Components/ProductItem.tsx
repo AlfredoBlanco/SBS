@@ -7,16 +7,9 @@ import { useDispatch } from 'react-redux';
 import type { AppDispatch } from  '../../redux/store';
 import { getAllProducts } from '../../redux/slices/productSlice';
 import DeleteModal from './DeleteModal';
+import type { Data } from '../../redux/slices/productSlice';
 
 
-interface Data {
-  _id: string,
-  title: string,
-  image: string,
-  description: string,
-  price: number,
-  stock: boolean
-}
 
 export default function Item({ data }: { data: Data }) {
   const dispatch = useDispatch<AppDispatch>();

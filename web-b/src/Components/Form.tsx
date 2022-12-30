@@ -4,16 +4,7 @@ import { Box, Checkbox, FormControl, IconButton,
 import { useState } from 'react';
 import NestModal from './NestModal';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-
-
-interface Data{
-    _id : string,
-    title : string,
-    image : string,
-    description : string,
-    price : number,
-    stock : boolean
-}
+import type { Data } from '../../redux/slices/productSlice';
 
 interface Changes{
     _id ?: string,
@@ -21,7 +12,7 @@ interface Changes{
     image ?: string,
     description ?: string,
     price ?: number,
-    stock ?: boolean
+    stock ?: number
 }
 
 
@@ -32,21 +23,15 @@ export default function Form({data, add} : {data ?: Data, add ?: boolean}){
         image : '',
         description : '',
         price : 0,
-        stock : false});
+        stock : 0});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.name === 'stock') {
-            setChanges({
-                ...changes,
-                [e.target.name] : e.target.checked
-            })
-        } else {
-
+        
             setChanges({
                 ...changes,
                 [e.target.name] : e.target.value
             })
-        }
+        
     }
     
     return(
@@ -77,7 +62,12 @@ export default function Form({data, add} : {data ?: Data, add ?: boolean}){
                 align='center'
                 marginTop = '2px'
             >
-                Nuevo producto
+                {
+                    add
+                    ? 'Nuevo producto'
+                    : 'Actualizar producto'
+                }
+                
             </Typography>   
             <FormControl
                 sx={{
@@ -150,12 +140,19 @@ export default function Form({data, add} : {data ?: Data, add ?: boolean}){
             <FormControl
                 sx={{
                     marginY : '1rem',
-                    width : `${W400 ? '50%' : '90%'}`
+                    width : `${W400 ? '80%' : '90%'}`,
+                    color : 'rgba(0,0,0,0.7)'
                 }}
             >
               <InputLabel htmlFor="stock-input">Stock</InputLabel>
-              <Checkbox id="stock-input" name='stock' 
-                onChange={handleChange} checked={changes?.stock ? true : false} />
+              <Input id="stock-input" name='stock' type='number' value={changes.stock} 
+                onChange={handleChange} />
+                <Typography
+                  display = {showInfo ? 'block' : 'none'}
+                >
+                  El stock debe ser positivo
+              </Typography>
+              
             </FormControl>
             <NestModal changes={changes} add={add} setShowInfo={setShowInfo} />
             
