@@ -1,12 +1,13 @@
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import { Box, Button, Collapse, Divider, List, ListItemButton, ListItemText, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Collapse, Divider, IconButton, List, ListItemButton, ListItemText, Typography, useMediaQuery } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { selectUser } from '../redux/features/userSlice';
-
-
-
+import { selectCart } from '../redux/features/cartSlice';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import Cart from './Cart';
 export default function Header() {
-    const {loggedUser} = useSelector(selectUser);
+    const { loggedUser } = useSelector(selectUser);
+    const { items } = useSelector(selectCart);
 
     return (
         <Box
@@ -20,13 +21,20 @@ export default function Header() {
             height='2rem'
             zIndex='90'
         >
+            {
+                loggedUser.loggedIn
+                    ? (
+                        <Cart />
+                    ) : ''
+            }
+
             <AccountCircleRoundedIcon fontSize='large' />
-            
+
             <Typography
                 variant='inherit'
             >
                 {loggedUser.loggedIn ? `Bienvenido, ${loggedUser.name}` : ''}
-                
+
             </Typography>
 
         </Box>
