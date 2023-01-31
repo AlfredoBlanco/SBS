@@ -22,7 +22,22 @@ export const cartSlice = createSlice({
         addItem: (state, {payload} : PayloadAction<Data>) => {
             const found = state.items.find((e: Data) => e._id === payload._id);
 
-            if(!found) state.items = [...state.items, payload];
+            if(!found) state.items = [...state.items, {...payload, quantity: 1}];
+        },
+        quitQuantity: (state, {payload} : PayloadAction<Data['_id']>) => {
+            const index = state.items.findIndex((e: Data) => e._id === payload);
+
+            if(index >= 0 && state.items[index].quantity > 1){
+                state.items[index].quantity--;
+            }
+
+        },
+        addQuantity: (state, {payload} : PayloadAction<Data['_id']>) => {
+            const index = state.items.findIndex((e: Data) => e._id === payload);
+
+            if(index >= 0 && state.items[index].quantity < state.items[index].stock){
+                state.items[index].quantity++;
+            }
         },
         clearCart: (state) => {
             state.items = [];
@@ -30,7 +45,7 @@ export const cartSlice = createSlice({
     },
 })
 
-export const { removeItem, addItem, clearCart } = cartSlice.actions;
+export const { removeItem, addItem, clearCart, quitQuantity, addQuantity } = cartSlice.actions;
 
 export const selectCart = (state: RootState) => state.cart;
 
