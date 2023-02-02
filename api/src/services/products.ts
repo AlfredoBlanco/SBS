@@ -6,7 +6,7 @@ interface ProductBody {
     price : number;
     image : string;
     description : string;
-    stock : boolean;
+    stock : number;
     
 }
 

@@ -8,12 +8,13 @@ import { useDispatch } from  'react-redux';
 import { AppDispatch } from '../../src/redux/store';
 import { logIn } from '../../src/redux/features/userSlice';
 import Router from 'next/router';
+import Notification from '../../src/components/Notification';
 
 interface AdminLogin {
     email: string;
     password: string;
 }
-interface Notice {
+export interface Notice {
     open: boolean;
     message: string;
 }
@@ -143,22 +144,12 @@ export default function Login() {
                 }
 
             </form>
-            <Snackbar
+            <Notification
                 open={notification.open}
-                autoHideDuration={3000}
-                onClose={handleClose}
-            >
-                <Alert
-                    onClose={handleClose}
-                    severity='error'
-                    sx={{
-                        bgcolor: '#d64933',
-                        color: '#fff'
-                    }}
-                >
-                    {notification.message}
-                </Alert>
-            </Snackbar>
+                message={notification.message}
+                handleClose={handleClose}
+            /> 
+            
         </Box>
     )
 }

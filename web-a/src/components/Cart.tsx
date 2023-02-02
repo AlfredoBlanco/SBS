@@ -1,12 +1,14 @@
-import { Box, Button, IconButton, Link, List, Slide, useMediaQuery } from "@mui/material";
+import { Box, Button, IconButton, Link, List, Slide, Typography, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../src/redux/store';
 import { selectCart } from "../redux/features/cartSlice";
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import CartItem from "./CartItem";
 import { grey } from '@mui/material/colors';
+import Summary from "./Summary";
 
 
 
@@ -26,10 +28,12 @@ export default function Cart() {
     return (
         <>
             <IconButton
+                disabled={items.length ? false : true}
                 onClick={handleOpen}
             >
                 {items.length} <ShoppingCartCheckoutIcon />
             </IconButton>
+
             <Slide direction='left' in={open} >
 
                 <Box
@@ -48,6 +52,7 @@ export default function Cart() {
                         transition: 'all 0.3s ease-in-out',
                     }}
                 >
+
                     <Box
                         display='flex'
                         flexDirection='column'
@@ -68,31 +73,51 @@ export default function Cart() {
                         >
                             <CloseIcon />
                         </Button>
-                        <Box
-                            display='flex'
-                            flexDirection={W650 ? 'row' : 'column'}
-                            width='100%'
-                            height='auto'
-                        >
-                            <List
-                                sx={{
-                                    width: `${W500 ? W650 ? '60%' : '90%' : '100%'}`,
-                                }}
-                            >
-                                {
-                                    items.map(e => (
-                                        <CartItem key={e._id} data={e} />
-                                    ))
-                                }
-                            </List>
-                            <Box 
-                                width= {W500 ? W650 ? '40%' : '90%' : '100%'}
-                            >
-                                {
-                                    items.map(e => e.quantity * e.price)
-                                }
-                            </Box>
-                        </Box>
+                        {
+                            items.length
+                                ? (
+                                    <Box
+                                        display='flex'
+                                        justifyContent='center'
+                                        alignItems={W650 ? '' : 'center'}
+                                        flexDirection={W650 ? 'row' : 'column'}
+                                        gap={W650 ? 0 : 2}
+                                        width='100%'
+                                        height='auto'
+                                    >
+                                        <List
+                                            sx={{
+                                                width: `${W500 ? W650 ? '60%' : '90%' : '100%'}`,
+                                            }}
+                                        >
+                                            {
+                                                items.map(e => (
+                                                    <CartItem key={e._id} data={e} />
+                                                ))
+                                            }
+                                        </List>
+                                        <Summary />
+
+
+
+                                    </Box>
+                                ) : (
+                                    <Box 
+                                        display='flex'
+                                        flexDirection='column'
+                                        alignItems='center'
+                                        padding='1rem'
+                                        bgcolor='#edf2fb'
+                                        borderRadius='1rem'
+                                        
+                                    >
+                                        <ProductionQuantityLimitsIcon sx={{fontSize: '15rem'}}  />
+                                        <Typography variant='h3' align='center'> El carrito esta vacio</Typography>
+                                        <Button color='secondary' onClick={handleClose}>Agregar elementos</Button>
+                                    </Box>
+                                )
+                        }
+
 
                     </Box>
                 </Box>

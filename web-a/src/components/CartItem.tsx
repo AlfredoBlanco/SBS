@@ -78,13 +78,6 @@ export default function CartItem({ data }: { data: Data }) {
                 </Box>
                 
 
-                <Typography
-                    align='center'
-                    width='20%'
-                >
-                    ${data.price * data.quantity}
-                </Typography>
-
                 <IconButton onClick={handleDelete}
                 >
                     <RemoveShoppingCartIcon />
