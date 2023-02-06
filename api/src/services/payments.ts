@@ -15,6 +15,12 @@ const createLink = async (items : Item[]) => {
         payment_methods : {
             installments : 1,
         },
+        back_urls: {
+            success: `${process.env.CLIENT_URL}/`,
+            pending: `${process.env.CLIENT_URL}/`,
+            failure: `${process.env.CLIENT_URL}/`,
+            
+        }
     };
 
     const payment = await axios.post(url, body, {

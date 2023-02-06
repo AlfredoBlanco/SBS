@@ -19,6 +19,7 @@ export default function Header() {
             alignItems='center'
             justifyContent='center'
             height='2rem'
+            maxWidth='70%'
             zIndex='90'
         >
             {
@@ -32,6 +33,7 @@ export default function Header() {
 
             <Typography
                 variant='inherit'
+                align='center'
             >
                 {loggedUser.loggedIn ? `Bienvenido, ${loggedUser.name}` : ''}
 

@@ -1,4 +1,4 @@
-import { Box, Button, Divider, IconButton, Link, List, Slide, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, CircularProgress, Typography, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectCart } from "../redux/features/cartSlice";
 import { grey } from '@mui/material/colors';
@@ -6,13 +6,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import type { Notice } from "../../pages/auth/login";
 import Notification from "./Notification";
+import ConfirmBuy from "./ConfirmBuy";
 
 export default function Summary() {
     const { items } = useSelector(selectCart);
     const [total, setTotal] = useState<number>(0);
+    const [open, setOpen] = useState<boolean>(false);
+    const [url, setUrl] = useState<string>('');
+    const [fetching, setFetching] = useState<boolean>(false);
     const [notification, setNotification] = useState<Notice>({
         open: false,
         message: '',
+        severity: 0,
     });
     const W650 = useMediaQuery('(min-width:650px)');
     const W500 = useMediaQuery('(min-width:500px)');
@@ -22,10 +27,12 @@ export default function Summary() {
             const value = current.price * current.quantity;
             return prev + value;
         }, 0)
+
         setTotal(totalPrice);
     }, [items]);
 
     const handleBuy = async () => {
+        setFetching(true);
         const body = items.map(e => {
             const { title, description, quantity } = e;
             return {
@@ -37,7 +44,7 @@ export default function Summary() {
             }
         })
 
-        const response = await axios.post('/payment',{
+        const response = await axios.post('/payment', {
             items: body,
         })
             .then(r => r.data.data)
@@ -45,17 +52,21 @@ export default function Summary() {
                 setNotification({
                     open: true,
                     message: e.response.data,
+                    severity: 2,
                 });
             });
-        if(response) {
-            console.log(response)
+        if (response) {
+            setUrl(response);
+            setOpen(true);
         }
+        setFetching(false)
 
     }
-    
+
     const handleClose = () => setNotification({
         open: false,
         message: '',
+        severity: 0,
     })
 
     return (
@@ -83,11 +94,12 @@ export default function Summary() {
                 {
                     items.map((e, i) => (
                         <Box
+                            key={i}
                             display='flex'
                             justifyContent='space-between'
                             width='70%'
                             paddingY='0.5rem'
-                            borderBottom={i === items.length -1 ? '' : `1px solid ${grey[300]}`}
+                            borderBottom={i === items.length - 1 ? '' : `1px solid ${grey[300]}`}
                         >
                             <Typography align="center">{e.title}</Typography>
                             <Typography>${e.quantity * e.price}</Typography>
@@ -114,7 +126,7 @@ export default function Summary() {
                             fontWeight: 'bold'
                         }}
                     >
-                        ${ total }
+                        ${total}
                     </Typography>
                 </Box>
 
@@ -129,14 +141,20 @@ export default function Summary() {
                 }}
                 onClick={handleBuy}
             >
-                Comprar
+                {
+                    fetching
+                        ? <CircularProgress size={20} />
+                        : 'Comprar'
+                }
             </Button>
+            <ConfirmBuy total={total} open={open} setOpen={setOpen} url={url} />
             <Notification
                 open={notification.open}
                 message={notification.message}
-                handleClose={ handleClose }
+                severity={notification.severity}
+                handleClose={handleClose}
             />
-            
+
         </Box>
     )
 }

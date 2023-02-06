@@ -17,6 +17,7 @@ interface AdminLogin {
 export interface Notice {
     open: boolean;
     message: string;
+    severity: number;
 }
 
 export default function Login() {
@@ -29,6 +30,7 @@ export default function Login() {
     const [notification, setNotification] = useState<Notice>({
         open: false,
         message: '',
+        severity: 0,
     });
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -42,6 +44,7 @@ export default function Login() {
     const handleClose = () => setNotification({
         open: false,
         message: '',
+        severity: 0,
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -53,6 +56,7 @@ export default function Login() {
                 setNotification({
                     open: true,
                     message: e.response.data,
+                    severity: 2,
                 });
             });
 
@@ -147,6 +151,7 @@ export default function Login() {
             <Notification
                 open={notification.open}
                 message={notification.message}
+                severity={notification.severity}
                 handleClose={handleClose}
             /> 
             

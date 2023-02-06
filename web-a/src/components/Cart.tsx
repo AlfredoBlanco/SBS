@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, Link, List, Slide, Typography, useMediaQuery } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../src/redux/store';
@@ -24,6 +24,11 @@ export default function Cart() {
     const handleClose = () => {
         setOpen(false);
     }
+
+    useEffect(() => {
+        !items.length ? setOpen(false) : ''
+    }, [items])
+    
 
     return (
         <>
@@ -101,21 +106,7 @@ export default function Cart() {
 
 
                                     </Box>
-                                ) : (
-                                    <Box 
-                                        display='flex'
-                                        flexDirection='column'
-                                        alignItems='center'
-                                        padding='1rem'
-                                        bgcolor='#edf2fb'
-                                        borderRadius='1rem'
-                                        
-                                    >
-                                        <ProductionQuantityLimitsIcon sx={{fontSize: '15rem'}}  />
-                                        <Typography variant='h3' align='center'> El carrito esta vacio</Typography>
-                                        <Button color='secondary' onClick={handleClose}>Agregar elementos</Button>
-                                    </Box>
-                                )
+                                ) : ''
                         }
 
 

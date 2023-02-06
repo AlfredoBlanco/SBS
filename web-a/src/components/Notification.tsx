@@ -4,7 +4,7 @@ import type { Notice } from "../../pages/auth/login";
 interface Notices extends Notice {
     handleClose?: any;
 }
-export default function Notification({ open, message, handleClose}: Notices) {
+export default function Notification({ open, message, severity, handleClose}: Notices) {
 
     return (
         <Snackbar
@@ -14,9 +14,9 @@ export default function Notification({ open, message, handleClose}: Notices) {
         >
             <Alert
                 onClose={handleClose}
-                severity='error'
+                severity={severity ? severity === 1? 'warning' : 'error' : 'success'}
                 sx={{
-                    bgcolor: '#d64933',
+                    bgcolor: `${severity ? severity === 1? '#e85d04' : '#d64933' : '#538d22'}` ,
                     color: '#fff'
                 }}
             >

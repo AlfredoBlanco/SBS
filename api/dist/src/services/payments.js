@@ -16,6 +16,11 @@ const createLink = (items) => __awaiter(void 0, void 0, void 0, function* () {
         payment_methods: {
             installments: 1,
         },
+        back_urls: {
+            success: `${process.env.CLIENT_URL}/`,
+            pending: `${process.env.CLIENT_URL}/`,
+            failure: `${process.env.CLIENT_URL}/`,
+        }
     };
     const payment = yield axios.post(url, body, {
         headers: {
