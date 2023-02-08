@@ -8,7 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const axios = require('axios');
+const { Buy } = require('../models');
+const { PaymentBody } = require('../interfaces');
 const createLink = (items) => __awaiter(void 0, void 0, void 0, function* () {
     const url = 'https://api.mercadopago.com/checkout/preferences';
     const body = {
@@ -20,7 +23,8 @@ const createLink = (items) => __awaiter(void 0, void 0, void 0, function* () {
             success: `${process.env.CLIENT_URL}/`,
             pending: `${process.env.CLIENT_URL}/`,
             failure: `${process.env.CLIENT_URL}/`,
-        }
+        },
+        notification_url: `${process.env.API_URL}/payment/notification`,
     };
     const payment = yield axios.post(url, body, {
         headers: {
@@ -30,6 +34,20 @@ const createLink = (items) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return payment.data;
 });
+const getAllBuys = () => __awaiter(void 0, void 0, void 0, function* () { return yield Buy.find(); });
+const saveBuy = (body) => __awaiter(void 0, void 0, void 0, function* () {
+    const newBuy = new Buy({
+        data_id: body.data.id,
+        type: body.type,
+        action: body.action,
+        mp_userId: body.user_id,
+        date_created: body.date_created,
+    });
+    yield newBuy.save();
+    return newBuy;
+});
 module.exports = {
     createLink,
+    getAllBuys,
+    saveBuy,
 };

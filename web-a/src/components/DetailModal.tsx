@@ -107,6 +107,8 @@ export default function DetailModal({ data }: { data?: Data }) {
                         </Typography>
                         {
                             loggedIn
+                                ? 
+                                data?.stock
                                 ? (
                                     <IconButton
                                         onClick={handleAdd}
@@ -122,6 +124,7 @@ export default function DetailModal({ data }: { data?: Data }) {
 
                                     </IconButton>
                                 )
+                                : ''
                                 : ''
                         }
 

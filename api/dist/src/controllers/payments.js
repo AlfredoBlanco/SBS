@@ -11,6 +11,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const { createLink } = require('../services/payments');
 const { issue, serverError, success } = require('../helpers/responses');
+const { saveBuy, getAllBuys } = require('../services/payments');
+const getBuys = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const buys = yield getAllBuys();
+        return success({
+            res,
+            data: buys
+        });
+    }
+    catch (e) {
+        return serverError({
+            res,
+            data: e,
+        });
+    }
+});
 const getLink = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { items } = req.body;
     try {
@@ -33,6 +49,22 @@ const getLink = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
 });
+const saveBuyData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { body } = req;
+    if (body.topic)
+        return res.status(200).send('OK');
+    try {
+        const BuyData = yield saveBuy(body);
+        if (!BuyData)
+            return issue({ res, data: 'Payment details were not saved, try again' });
+        return res.status(200).send('OK');
+    }
+    catch (e) {
+        return serverError({ res, data: e });
+    }
+});
 module.exports = {
     getLink,
+    saveBuyData,
+    getBuys,
 };

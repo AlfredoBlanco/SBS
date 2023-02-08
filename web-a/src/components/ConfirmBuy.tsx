@@ -11,7 +11,7 @@ interface Props {
     setOpen: any;
     total: number;
 }
-/* Ver como hacer para que las compras se guarden el la BBDD y hacer aprtado de mis compras */
+
 export default function DetailModal({ url, open, setOpen, total }: Props) {
     const dispatch = useDispatch();
     const [thanks, setThanks] = useState<boolean>(false);
@@ -24,9 +24,6 @@ export default function DetailModal({ url, open, setOpen, total }: Props) {
     const handleCloseAll = () => {
         dispatch(clearCart());
 
-    }
-    const handleConfirm = () => {
-        setThanks(true)
     }
 
 
@@ -91,7 +88,7 @@ export default function DetailModal({ url, open, setOpen, total }: Props) {
                                 >
                                     El valor de su compra es de ${total}
                                 </Typography>
-                                <Link href={url} target='_blank' rel="noopener"
+                                <Link href={url}
                                     underline="none"
                                     color='error'
                                     sx={{
@@ -106,7 +103,6 @@ export default function DetailModal({ url, open, setOpen, total }: Props) {
                                         }
 
                                     }}
-                                    onClick={handleConfirm}
                                 >
                                     PAGAR
                                 </Link>

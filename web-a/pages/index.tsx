@@ -135,6 +135,7 @@ const Home: NextPage<Props> = ({ status }) => {
 
 export async function getServerSideProps(context: any) {
   const { query: { status = '' } } = context;
+
   return {
     props: { status },
   }

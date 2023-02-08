@@ -1,9 +1,3 @@
-vendedor : 
-{
-    usuario : TESTYYALAQUE,
-    contraseña : BdxTk2zEh9
-}
-
 comprador : 
 {
     usuario : TESTLQ3ERTWT,
@@ -18,30 +12,3 @@ Tarjetas :
     11/25,
     123,
 }
-
-const body = {
-    items : [
-        {
-            title: "Titulo",
-            quantity: 1,
-            unit_price: 500
-        },
-        {
-            title: "Titulo",
-            quantity: 1,
-            unit_price: 100
-        }
-    ],
-    back_urls: {
-        success : "url",
-        failure : "url",
-        pending : "url",
-    },
-    notification_url: "url"
-}
-
-https://api.mercadopago.com/checkout/preferences
-headers :
-    Content-Type: application/json,
-    Authorization: 'Bearer accesstoken'
-*POST*

@@ -9,8 +9,8 @@ export default function Footer() {
         <Box
             display='flex'
             flexDirection={W650 ? 'row' : 'column'}
-            justifyContent='space-evenly'
-            alignItems='center'
+            justifyContent='flex-end'
+            alignItems='flex-end'
             minHeight='20vh'
             width='100%'
             sx={{
@@ -18,11 +18,13 @@ export default function Footer() {
             }}
         >
             <Typography 
-                variant={W450 ? 'caption' : 'subtitle1'}
+                variant='subtitle1'
                 color='primary'
                 align='center'
+                marginBottom='1rem'
+                marginRight='1rem'
             >
-                Revisar este footer de mierdaa
+                Muchas gracias por confiar en nosotros
             </Typography>
             
 

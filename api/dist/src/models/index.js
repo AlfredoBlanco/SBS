@@ -14,9 +14,18 @@ const UserSchema = new Schema({
     password: { type: String, required: true },
     role: { type: Number, required: true },
 });
+const BuySchema = new Schema({
+    data_id: { type: String, required: true },
+    type: { type: String, required: true },
+    action: { type: String, required: true },
+    mp_userId: { type: Number, required: true },
+    date_created: { type: Date, required: true },
+});
 const Product = mongoose.model('Product', ProductSchema);
 const User = mongoose.model('User', UserSchema);
+const Buy = mongoose.model('Buy', BuySchema);
 module.exports = {
     Product,
     User,
+    Buy,
 };
