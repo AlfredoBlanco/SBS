@@ -9,28 +9,24 @@ export default function Footer() {
         <Box
             display='flex'
             flexDirection={W650 ? 'row' : 'column'}
-            justifyContent='space-evenly'
-            alignItems='center'
-            minHeight='40vh'
+            justifyContent='flex-end'
+            alignItems='flex-end'
+            minHeight='20vh'
             width='100%'
             sx={{
                 background : `${blueGrey[900]}`
             }}
         >
             <Typography 
-                variant={W450 ? 'caption' : 'subtitle1'}
+                variant='subtitle1'
                 color='primary'
                 align='center'
+                marginBottom='1rem'
+                marginRight='1rem'
             >
-                Developer : <strong>Alfredo Blanco</strong>
+                Muchas gracias por confiar en nosotros
             </Typography>
-            <Typography 
-                variant='body1'
-                color='primary'
-                align='center'
-            >
-                Fecha de Deploy : <strong>12/08/22</strong>
-            </Typography>
+            
 
         </Box>
     )
