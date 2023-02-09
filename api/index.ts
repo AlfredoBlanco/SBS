@@ -1,5 +1,5 @@
 const app = require('./src/app');
-const { Server } = require('socket.io');
+const socketio = require('socket.io');
 const http = require('http');
 const mongoosed = require('mongoose');
 require('dotenv').config();
@@ -8,9 +8,9 @@ const { PORT } = process.env;
 const connection = mongoosed.connection;
 
 const server = http.createServer(app);
-const io = new Server(server, {
+const io = socketio(server, {
     cors: {
-        origin : "*",
+        origin : process.env.CLIENT_URL,
         methods : ['GET', 'POST']
     }
 });
