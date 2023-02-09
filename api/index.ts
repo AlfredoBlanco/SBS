@@ -10,7 +10,7 @@ const connection = mongoosed.connection;
 const server = http.createServer(app);
 const io = socketio(server, {
     cors: {
-        origin : process.env.CLIENT_URL,
+        origin : "*",
         methods : ['GET', 'POST']
     }
 });

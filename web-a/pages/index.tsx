@@ -29,6 +29,9 @@ const Home: NextPage<Props> = ({ status }) => {
   const W500 = useMediaQuery('(min-width:500px)');
 
   try {
+    socket.on("connect_error", (err) => {
+      console.log(`connect_error due to ${err.message}`);
+    });
     socket.on('server:changes', async () => dispatch(getAllProducts()));
 
   } catch (e) {
