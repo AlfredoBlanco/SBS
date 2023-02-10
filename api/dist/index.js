@@ -1,16 +1,15 @@
 "use strict";
 const app = require('./src/app');
-const socketio = require('socket.io');
+const { Server } = require('socket.io');
 const http = require('http');
 const mongoosed = require('mongoose');
 require('dotenv').config();
 const { PORT } = process.env;
 const connection = mongoosed.connection;
 const server = http.createServer(app);
-const io = socketio(server, {
+const io = new Server(server, {
     cors: {
         origin: "*",
-        methods: ['GET', 'POST']
     }
 });
 connection.once('open', () => {

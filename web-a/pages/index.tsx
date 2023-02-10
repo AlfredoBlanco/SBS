@@ -31,6 +31,7 @@ const Home: NextPage<Props> = ({ status }) => {
   try {
     socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
+      console.log(err);
     });
     socket.on('server:changes', async () => dispatch(getAllProducts()));
 
