@@ -1,8 +1,8 @@
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import socket from '../src/socket';
-import Footer from '../src/components/Footer';
+/* import socket from '../src/socket';
+ */import Footer from '../src/components/Footer';
 import Card from '../src/components/Card';
 import Menu from '../src/components/Menu';
 import Header from '../src/components/Header';
@@ -28,7 +28,7 @@ const Home: NextPage<Props> = ({ status }) => {
   });
   const W500 = useMediaQuery('(min-width:500px)');
 
-  try {
+  /* try {
     socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
       console.log(err);
@@ -37,7 +37,7 @@ const Home: NextPage<Props> = ({ status }) => {
 
   } catch (e) {
     console.log(e);
-  }
+  } */
 
   useEffect(() => {
     dispatch(getAllProducts());
