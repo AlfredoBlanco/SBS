@@ -13,6 +13,9 @@ const io = socketio(server, {
         methods: ['GET', 'POST']
     }
 });
+io.on('connection', () => {
+    console.log('Connected');
+});
 connection.once('open', () => {
     console.log('Mongo opened');
     const MChangeStream = connection.collection('products').watch();
