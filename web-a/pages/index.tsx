@@ -13,12 +13,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch } from '../src/redux/store';
 import type { Notice } from './auth/login';
 import Notification from '../src/components/Notification';
+import { MongoClient } from 'mongodb';
+import { store } from  '../src/redux/store';
+
 
 interface Props {
   status: string;
+  change: boolean;
 }
 
-const Home: NextPage<Props> = ({ status }) => {
+const Home: NextPage<Props> = ({ status, change }) => {
   const data = useSelector(selectProducts);
   const dispatch = useDispatch<AppDispatch>();
   const [notification, setNotification] = useState<Notice>({
@@ -27,8 +31,16 @@ const Home: NextPage<Props> = ({ status }) => {
     severity: 0,
   });
   const W500 = useMediaQuery('(min-width:500px)');
+  useEffect(() => {
+    console.log('change');
 
-  try {
+  }, [change])
+  /* try{
+    socket.on('change', () => console.log('Cambie'))
+  } catch(e) {
+    console.log(e)
+  } */
+  /* try {
     socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
       console.log(err);
@@ -37,7 +49,7 @@ const Home: NextPage<Props> = ({ status }) => {
 
   } catch (e) {
     console.log(e);
-  }
+  } */
 
   useEffect(() => {
     dispatch(getAllProducts());
@@ -88,6 +100,7 @@ const Home: NextPage<Props> = ({ status }) => {
       sx={{ width: '100vw', height: '100vh', overflowX: 'hidden' }}
     >
       <Menu />
+      <button onClick={() => console.log(change)}>Ver Change</button>
 
       <Header />
 
@@ -139,9 +152,17 @@ const Home: NextPage<Props> = ({ status }) => {
 
 export async function getServerSideProps(context: any) {
   const { query: { status = '' } } = context;
+  let change= false;
+  
+  const mongoClient = new MongoClient(String(process.env.NEXT_PUBLIC_DB_URL));
+  const changeStream = mongoClient.db().collection('products').watch();
+  changeStream.on('change', () => {
+    console.log('entre');
+    window.location.reload();
+  })
 
   return {
-    props: { status },
+    props: { status, change },
   }
 }
 
