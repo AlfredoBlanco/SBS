@@ -3,12 +3,13 @@ import {
     FormControl, Input, InputLabel, Link, LinearProgress
 } from '@mui/material';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../src/redux/store';
 import { logIn } from '../../src/redux/features/userSlice';
 import Router from 'next/router';
 import Notification from '../../src/components/Notification';
+import { GetServerSideProps } from 'next'
 
 interface AdminLogin {
     email: string;
@@ -20,7 +21,7 @@ export interface Notice {
     severity: number;
 }
 
-export default function Login() {
+export default function Login({ success }: { success : boolean}) {
     const dispatch = useDispatch<AppDispatch>();
     const W700 = useMediaQuery('(min-width:700px)');
     const [info, setInfo] = useState<AdminLogin>({
@@ -33,6 +34,16 @@ export default function Login() {
         severity: 0,
     });
     const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(success) {
+            setNotification({
+                open: true,
+                message: 'User created successfully',
+                severity: 0,
+            })
+        }
+    }, [])
 
     const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
         setInfo({
@@ -175,3 +186,12 @@ export default function Login() {
         </Box>
     )
 }
+
+export const getServerSideProps: GetServerSideProps =  async(context) => {
+    const { query: { success = false } } = context;
+    return {
+      props: {
+        success,
+      },
+    }
+  }

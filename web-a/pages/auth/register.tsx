@@ -74,7 +74,7 @@ export default function Login() {
                         severity: 0,
                     });
 
-                    Router.push('/auth/login');
+                    Router.push('/auth/login/?success=true');
                 })
                 .catch((e) => {
                     for(let i in e.response.data) {
