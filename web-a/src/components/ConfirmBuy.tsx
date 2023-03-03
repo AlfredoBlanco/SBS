@@ -6,13 +6,12 @@ import { clearCart } from "../redux/features/cartSlice";
 import { useEffect, useState } from "react";
 
 interface Props {
-    url: string;
     open: boolean;
     setOpen: any;
     total: number;
 }
 
-export default function DetailModal({ url, open, setOpen, total }: Props) {
+export default function DetailModal({ open, setOpen, total }: Props) {
     const dispatch = useDispatch();
     const [thanks, setThanks] = useState<boolean>(false);
     
@@ -88,7 +87,7 @@ export default function DetailModal({ url, open, setOpen, total }: Props) {
                                 >
                                     El valor de su compra es de ${total}
                                 </Typography>
-                                <Link href={url}
+                                <Link href={'/?status=approved'}
                                     underline="none"
                                     color='error'
                                     sx={{

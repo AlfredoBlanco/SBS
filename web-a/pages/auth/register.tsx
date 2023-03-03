@@ -4,16 +4,16 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../src/redux/store';
-import { logIn } from '../../src/redux/features/userSlice';
 import Router from 'next/router';
 import Notification from '../../src/components/Notification';
 
-interface AdminLogin {
+interface NewUser {
     email: string;
     password: string;
+    name: string;
+    passwordConfirm: string;
 }
+
 export interface Notice {
     open: boolean;
     message: string;
@@ -21,12 +21,16 @@ export interface Notice {
 }
 
 export default function Login() {
-    const dispatch = useDispatch<AppDispatch>();
     const W700 = useMediaQuery('(min-width:700px)');
-    const [info, setInfo] = useState<AdminLogin>({
+    const [info, setInfo] = useState<NewUser>({
+        name: '',
         email: '',
         password: '',
-    })
+        passwordConfirm: '',
+    });
+
+    const [error, setError] = useState<boolean>(false);
+
     const [notification, setNotification] = useState<Notice>({
         open: false,
         message: '',
@@ -47,27 +51,44 @@ export default function Login() {
         severity: 0,
     });
 
+    const validate = () => {
+        let err: any = {};
+
+        if (!info.name || !/^[a-zA-z ]+$/i.test(info.name) || info.name.length < 4) err.name = true;
+        if (!info.email || !/^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i.test(info.email)) err.email = true;
+        if (!info.password || info.password !== info.passwordConfirm) err.password = true;
+
+        return Object.keys(err).length === 0 ? true : false;
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        const user = await axios.post('/auth/login', { ...info })
-            .then(r => r.data.data)
-            .catch((e) => {
-                setNotification({
-                    open: true,
-                    message: e.response.data,
-                    severity: 2,
-                });
-            });
+        if (validate()) {
+            setError(false);
+            await axios.post('/auth/register', { ...info })
+                .then(({ data }) => {
+                    setNotification({
+                        open: true,
+                        message: data.data,
+                        severity: 0,
+                    });
 
-        if (user) {
-            window.localStorage.setItem(
-                'LoggedUser', JSON.stringify(user)
-            );
-            dispatch(logIn(user))
-            Router.push('/')
+                    Router.push('/auth/login');
+                })
+                .catch((e) => {
+                    for(let i in e.response.data) {
+                        setNotification({
+                        open: true,
+                        message: e.response.data[i],
+                        severity: 2,
+                    });
+                    }
+                })
+
+        } else {
+            setError(true);
         }
-
         setLoading(false)
     }
 
@@ -101,8 +122,26 @@ export default function Login() {
                     color='#6a21d2'
 
                 >
-                    Inicie sesión
+                    Registrate
                 </Typography>
+                {/* Name */}
+                <FormControl
+                    sx={{
+                        marginY: '1rem',
+                        width: '90%',
+                    }}
+                >
+                    <InputLabel htmlFor="name-input">Nombre</InputLabel>
+                    <Input id="name-input" name='name' value={info.name} fullWidth={true}
+                        onChange={handleChange} />
+                    <Typography fontSize='0.8rem'>
+                        {
+                            error ? 'El nombre solo debe tener letras, al menos 4' : ''
+                        }
+                    </Typography>
+                </FormControl>
+
+                {/* Email */}
                 <FormControl
                     sx={{
                         marginY: '1rem',
@@ -112,8 +151,14 @@ export default function Login() {
                     <InputLabel htmlFor="email-input">Email</InputLabel>
                     <Input id="email-input" name='email' value={info.email} fullWidth={true}
                         onChange={handleChange} />
+                    <Typography fontSize='0.8rem'>
+                        {
+                            error ? 'El email debe ser una dirección de correo válida' : ''
+                        }
+                    </Typography>
                 </FormControl>
 
+                {/* Password */}
                 <FormControl
                     sx={{
                         marginY: '1rem',
@@ -123,7 +168,28 @@ export default function Login() {
                     <InputLabel htmlFor="password-input">Contraseña</InputLabel>
                     <Input id="password-input" name='password' type='password' value={info.password}
                         onChange={handleChange} />
+                    <Typography fontSize='0.8rem'>
+                        {
+                            error ? 'La contraseña es requerida' : ''
+                        }
+                    </Typography>
+                </FormControl>
 
+                {/* Password-Confirm */}
+                <FormControl
+                    sx={{
+                        marginY: '1rem',
+                        width: '90%'
+                    }}
+                >
+                    <InputLabel htmlFor="confirm-input">Confirmar contraseña</InputLabel>
+                    <Input id="confirm-input" name='passwordConfirm' type='password' value={info.passwordConfirm}
+                        onChange={handleChange} />
+                    <Typography fontSize='0.8rem'>
+                        {
+                            error ? 'Las contraseñas deben coincidir' : ''
+                        }
+                    </Typography>
                 </FormControl>
                 {
                     loading
@@ -149,7 +215,7 @@ export default function Login() {
 
                                     sx={{ color: '#6a21d2' }}
                                 >
-                                    ENTRAR
+                                    ENVIAR
                                 </Button>
                                 <Link href={'/auth/register'}
                                     color='#6a21d2'
@@ -157,7 +223,7 @@ export default function Login() {
                                     <Typography
                                         fontSize='0.8rem'
                                     >
-                                        No tienes cuenta? Registrate
+                                        Ya tienes cuenta? Inicia sesión
                                     </Typography>
                                 </Link>
                             </Box>

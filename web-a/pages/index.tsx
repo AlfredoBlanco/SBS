@@ -29,11 +29,6 @@ const Home: NextPage<Props> = ({ status }) => {
   });
   const W500 = useMediaQuery('(min-width:500px)');
   
-  /* try{
-    socket.on('change', () => console.log('Cambie'))
-  } catch(e) {
-    console.log(e)
-  } */
   try {
     socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
