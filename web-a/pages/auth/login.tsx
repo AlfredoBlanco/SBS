@@ -11,7 +11,7 @@ import Router from 'next/router';
 import Notification from '../../src/components/Notification';
 import { GetServerSideProps } from 'next'
 
-interface AdminLogin {
+interface UserLogin {
     email: string;
     password: string;
 }
@@ -24,7 +24,7 @@ export interface Notice {
 export default function Login({ success }: { success : boolean}) {
     const dispatch = useDispatch<AppDispatch>();
     const W700 = useMediaQuery('(min-width:700px)');
-    const [info, setInfo] = useState<AdminLogin>({
+    const [info, setInfo] = useState<UserLogin>({
         email: '',
         password: '',
     })

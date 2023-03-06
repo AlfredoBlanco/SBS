@@ -1,11 +1,9 @@
-import { Box, Button, IconButton, Link, List, Slide, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, IconButton, List, Slide, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../src/redux/store';
+import { useSelector } from 'react-redux';
 import { selectCart } from "../redux/features/cartSlice";
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
-import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import CartItem from "./CartItem";
 import { grey } from '@mui/material/colors';
 import Summary from "./Summary";
@@ -28,7 +26,7 @@ export default function Cart() {
     useEffect(() => {
         !items.length ? setOpen(false) : ''
     }, [items])
-    
+
 
     return (
         <>

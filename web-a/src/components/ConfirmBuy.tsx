@@ -1,9 +1,6 @@
-import { Box, Button, IconButton, Link, Modal, Typography, useMediaQuery } from "@mui/material";
-import { Data } from '../redux/features/productSlice';
+import { Box, Link, Modal, Typography } from "@mui/material";
 import { grey, red } from '@mui/material/colors';
 import { useDispatch } from "react-redux";
-import { clearCart } from "../redux/features/cartSlice";
-import { useEffect, useState } from "react";
 
 interface Props {
     open: boolean;
@@ -12,18 +9,11 @@ interface Props {
 }
 
 export default function DetailModal({ open, setOpen, total }: Props) {
-    const dispatch = useDispatch();
-    const [thanks, setThanks] = useState<boolean>(false);
-    
+
     const handleClose = () => {
         setOpen(false);
-        setThanks(false)
     }
-    
-    const handleCloseAll = () => {
-        dispatch(clearCart());
 
-    }
 
 
     return (
@@ -50,64 +40,31 @@ export default function DetailModal({ open, setOpen, total }: Props) {
                 gap={3}
                 bgcolor={`${grey[100]}`}
             >
-                {
-                    thanks
-                        ? (
-                            <>
-                            <Typography
-                                variant="h5"
-                                align='center'
-                            >
-                                Muchas gracias por su compra
-                            </Typography>
-                            <Button
-                                color='error'
-                                sx={{
-                                    padding: '0.5rem',
-                                    border: `1px solid ${red.A400}`,
-                                    borderRadius: '0.5rem',
-                                    transition: 'all',
-                                    transitionDuration: '300ms',
-                                    '&:hover': {
-                                        color: '#fff',
-                                        background: `${red.A400}`
-                                    }
 
-                                }}
-                                onClick={handleCloseAll}
-                            >
-                                Seguir explorando
-                            </Button>
-                            </>
-                        )
-                        : (
-                            <>
-                                <Typography
-                                    variant="h5"
-                                >
-                                    El valor de su compra es de ${total}
-                                </Typography>
-                                <Link href={'/?status=approved'}
-                                    underline="none"
-                                    color='error'
-                                    sx={{
-                                        padding: '0.5rem',
-                                        border: `1px solid ${red.A400}`,
-                                        borderRadius: '0.5rem',
-                                        transition: 'all',
-                                        transitionDuration: '300ms',
-                                        '&:hover': {
-                                            color: '#fff',
-                                            background: `${red.A400}`
-                                        }
+                <Typography
+                    variant="h5"
+                >
+                    El valor de su compra es de ${total}
+                </Typography>
+                <Link href={'/?status=approved'}
+                    underline="none"
+                    color='error'
+                    sx={{
+                        padding: '0.5rem',
+                        border: `1px solid ${red.A400}`,
+                        borderRadius: '0.5rem',
+                        transition: 'all',
+                        transitionDuration: '300ms',
+                        '&:hover': {
+                            color: '#fff',
+                            background: `${red.A400}`
+                        }
 
-                                    }}
-                                >
-                                    PAGAR
-                                </Link>
-                            </>
-                        )
-                }
+                    }}
+                >
+                    PAGAR
+                </Link>
+
 
 
 

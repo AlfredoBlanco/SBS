@@ -14,7 +14,7 @@ import { selectUser } from "../redux/features/userSlice";
 
 export default function DetailModal({ data }: { data?: Data }) {
     const W1000 = useMediaQuery('(min-width:1000px)');
-    const W750 = useMediaQuery('(min-width:750px)');
+    const W600 = useMediaQuery('(min-width:600px)');
     const W500 = useMediaQuery('(min-width:500px)');
     const { loggedUser: { loggedIn } } = useSelector(selectUser);
     const dispatch = useDispatch<AppDispatch>();
@@ -50,11 +50,15 @@ export default function DetailModal({ data }: { data?: Data }) {
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}
             >
                 <Box
                     position='relative'
-                    top='10%'
-                    left={W500 ? '20%' : '10%'}
+
                     display='flex'
                     flexDirection={W1000 ? 'row' : 'column'}
                     justifyContent='space-evenly'
@@ -63,7 +67,7 @@ export default function DetailModal({ data }: { data?: Data }) {
                     sx={{
                         background: `${grey[100]}`,
                         borderRadius: '0.5rem',
-                        overflow: 'hidden'
+                        overflowX: 'hidden',
                     }}
                 >
                     <IconButton
@@ -85,11 +89,11 @@ export default function DetailModal({ data }: { data?: Data }) {
                         alignItems='center'
                         width='100%'
                         height='100%'
+                        gap={W500? '' : '0'}
                     >
                         <Typography
-                            variant='h3'
+                            variant={W600? 'h3' : 'h4'}
                             align='center'
-                            mt='1rem'
                         >
                             {data?.title}
                         </Typography>
@@ -100,31 +104,30 @@ export default function DetailModal({ data }: { data?: Data }) {
                         </Typography>
                         <Typography
                             variant='body2'
-                            mb='1rem'
                             align='center'
                         >
                             {data?.description}
                         </Typography>
                         {
                             loggedIn
-                                ? 
+                                ?
                                 data?.stock
-                                ? (
-                                    <IconButton
-                                        onClick={handleAdd}
-                                        sx={{
-                                            alignSelf: 'flex-end'
-                                        }}
-                                    >
-                                        {
-                                            done
-                                                ? <DoneIcon />
-                                                : <AddShoppingCartIcon />
-                                        }
+                                    ? (
+                                        <IconButton
+                                            onClick={handleAdd}
+                                            sx={{
+                                                alignSelf: 'flex-end'
+                                            }}
+                                        >
+                                            {
+                                                done
+                                                    ? <DoneIcon />
+                                                    : <AddShoppingCartIcon />
+                                            }
 
-                                    </IconButton>
-                                )
-                                : ''
+                                        </IconButton>
+                                    )
+                                    : ''
                                 : ''
                         }
 

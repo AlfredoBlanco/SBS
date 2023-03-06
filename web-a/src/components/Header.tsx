@@ -1,20 +1,19 @@
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import { Box, Button, Collapse, Divider, IconButton, List, ListItemButton, ListItemText, Typography, useMediaQuery } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { selectUser } from '../redux/features/userSlice';
 import { selectCart } from '../redux/features/cartSlice';
-import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import Cart from './Cart';
+
+
 export default function Header() {
     const { loggedUser } = useSelector(selectUser);
-    const { items } = useSelector(selectCart);
 
     return (
         <Box
-            position='relative'
-            mt='0.5rem'
-            mx='0.5rem'
-            alignSelf='flex-end'
+            position='absolute'
+            top= '1rem'
+            right= '1rem'
             display='flex'
             alignItems='center'
             justifyContent='center'

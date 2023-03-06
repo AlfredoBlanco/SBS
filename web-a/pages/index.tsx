@@ -8,7 +8,7 @@ import Menu from '../src/components/Menu';
 import Header from '../src/components/Header';
 import { Data } from '../src/redux/features/productSlice';
 import { getAllProducts, selectProducts } from '../src/redux/features/productSlice';
-import { logIn, selectUser } from '../src/redux/features/userSlice';
+import { logIn } from '../src/redux/features/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch } from '../src/redux/store';
 import type { Notice } from './auth/login';
@@ -30,10 +30,6 @@ const Home: NextPage<Props> = ({ status }) => {
   const W500 = useMediaQuery('(min-width:500px)');
   
   try {
-    socket.on("connect_error", (err) => {
-      console.log(`connect_error due to ${err.message}`);
-      console.log(err);
-    });
     socket.on('server:changes', async () => dispatch(getAllProducts()));
 
   } catch (e) {
@@ -86,6 +82,7 @@ const Home: NextPage<Props> = ({ status }) => {
       flexDirection='column'
       alignItems='center'
       justifyContent='space-between'
+      pt='3rem'
       sx={{ width: '100vw', height: '100vh', overflowX: 'hidden' }}
     >
       <Menu />

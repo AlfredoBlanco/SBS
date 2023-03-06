@@ -1,4 +1,4 @@
-import { Box, Checkbox, FormControl, IconButton,
+import { Box, FormControl, IconButton,
     InputLabel, Input,
     useMediaQuery, Typography } from '@mui/material';
 import { useState } from 'react';

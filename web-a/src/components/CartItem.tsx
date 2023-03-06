@@ -1,14 +1,10 @@
-import { Box, Button, Divider, Grid, IconButton, Input, Link, ListItem, Slide, Typography, useMediaQuery } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Divider, IconButton, Input, ListItem, Typography, useMediaQuery } from "@mui/material";
+import React from "react";
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../src/redux/store';
-import { removeItem, selectCart, quitQuantity, addQuantity } from "../redux/features/cartSlice";
-import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import { removeItem, quitQuantity, addQuantity } from "../redux/features/cartSlice";
 import { Data } from "../redux/features/productSlice";
-import Image from "next/image";
-
-
 
 
 export default function CartItem({ data }: { data: Data }) {
@@ -66,17 +62,17 @@ export default function CartItem({ data }: { data: Data }) {
                                 ${data.price}
 
                             </Typography>
-                        ): ''
+                        ) : ''
                 }
 
                 <Box
                     display='flex'
                 >
                     <IconButton onClick={handleQuit}>-</IconButton>
-                    <Input type="text" value={data.quantity} sx={{width: '1.5rem'}} />
+                    <Input type="text" value={data.quantity} sx={{ width: '1.5rem' }} />
                     <IconButton onClick={handleAdd}>+</IconButton>
                 </Box>
-                
+
 
                 <IconButton onClick={handleDelete}
                 >

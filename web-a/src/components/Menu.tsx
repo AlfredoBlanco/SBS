@@ -120,7 +120,6 @@ export default function Menu() {
                         </Box>
                     </Box>
                 </Box>
-                {/* YA tengo para que se logee si esta el localstorage y lo saco, implementar el redux ahora */}
             </Slide>
         </>
     )

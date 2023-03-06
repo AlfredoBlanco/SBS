@@ -4,7 +4,6 @@ import { blueGrey } from '@mui/material/colors';
 
 export default function Footer() {
     const W650 = useMediaQuery('(min-width:650px)')
-    const W450 = useMediaQuery('(min-width:450px)')
     return(
         <Box
             display='flex'

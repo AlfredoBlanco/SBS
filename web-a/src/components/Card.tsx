@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton, Modal, Skeleton } from '@mui/material';
+import { Box, Typography, Skeleton } from '@mui/material';
 import { red, green, grey } from '@mui/material/colors';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import DetailModal from './DetailModal';

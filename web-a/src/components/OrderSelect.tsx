@@ -1,9 +1,8 @@
-import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Typography, Grid, Input, TextField } from "@mui/material";
-import { orderZA, orderAZ, getAllProducts, orderPMax, orderPMin, filterByName, selectProducts } from "../redux/features/productSlice";
-import type { Data } from "../redux/features/productSlice";
-import { useDispatch, useSelector } from 'react-redux';
+import { FormControl, MenuItem, Select, SelectChangeEvent, Typography, Grid, Input } from "@mui/material";
+import { orderZA, orderAZ, getAllProducts, orderPMax, orderPMin, filterByName } from "../redux/features/productSlice";
+import { useDispatch } from 'react-redux';
 import { AppDispatch } from "../redux/store";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 interface Props {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
