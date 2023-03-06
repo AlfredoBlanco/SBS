@@ -22,8 +22,8 @@ export default function Login() {
     const dispatch = useDispatch<AppDispatch>();
     const W700 = useMediaQuery('(min-width:700px)');
     const [info, setInfo] = useState<AdminLogin>({
-        email: '',
-        password: '',
+        email: 'admin@admin.com',
+        password: 'Admin1',
     })
     const [notification, setNotification] = useState<Notice>({
         open: false,
