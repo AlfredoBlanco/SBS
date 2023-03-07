@@ -49,7 +49,7 @@ export default function Menu() {
                     position='fixed'
                     top='0'
                     left='0'
-                    height='100vh'
+                    height='100%'
                     width='100vw'
                     zIndex='100'
                 >
@@ -57,7 +57,7 @@ export default function Menu() {
                         position='fixed'
                         top='0'
                         left='0'
-                        height='100vh'
+                        height='100%'
                         display='flex'
                         flexDirection='column'
                         alignItems='center'
